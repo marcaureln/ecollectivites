@@ -4,7 +4,7 @@ const verifyServiceSid = process.env.TWILIO_VERIFY_SERVICE_SID;
 
 const twilio = require('twilio')(accountSid, authToken);
 
-let verify = function (req, res, next) {
+exports.verify = function (req, res, next) {
 	const phone = req.body.phone;
 	if (!phone) {
 		res.status(400).json({ error: 'Invalid phone number' });
@@ -22,7 +22,7 @@ let verify = function (req, res, next) {
 		});
 };
 
-let check = function (req, res, next) {
+exports.check = function (req, res, next) {
 	const phone = req.body.phone;
 	const code = req.body.code;
 	if (!phone || !code) {
@@ -51,12 +51,10 @@ let check = function (req, res, next) {
 		});
 };
 
-let signup = function (req, res, next) {
+exports.signup = function (req, res, next) {
 	res.status(200).send('/api/auth/signup');
 };
 
-let login = function (req, res, next) {
+exports.login = function (req, res, next) {
 	res.status(200).send('/api/auth/login');
 };
-
-module.exports = { verify, check, signup, login };
