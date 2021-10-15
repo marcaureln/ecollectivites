@@ -1,5 +1,6 @@
 const accountSid = process.env.TWILIO_ACCOUNT_SID;
 const authToken = process.env.TWILIO_AUTH_TOKEN;
+const verifyServiceSid = process.env.TWILIO_VERIFY_SERVICE_SID;
 
 const twilio = require('twilio')(accountSid, authToken);
 
@@ -10,7 +11,7 @@ let verify = function (req, res, next) {
 		return;
 	}
 	twilio.verify
-		.services('VA4e4b5df8e6bdd3bdcdcd127dbecc2e43')
+		.services(verifyServiceSid)
 		.verifications.create({ to: phone, channel: 'sms', locale: 'fr' })
 		.then((verification) => {
 			let message = 'Code sended to ' + verification.to + ' verification ' + verification.status;
@@ -29,7 +30,7 @@ let check = function (req, res, next) {
 		return;
 	}
 	twilio.verify
-		.services('VA4e4b5df8e6bdd3bdcdcd127dbecc2e43')
+		.services(verifyServiceSid)
 		.verificationChecks.create({ to: phone, code: code })
 		.then((verificationCheck) => {
 			switch (verificationCheck.status) {
