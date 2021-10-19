@@ -9,7 +9,5 @@ const pool = new Pool({
 });
 
 module.exports = {
-	query: (queryString, params, callback) => {
-		return pool.query(queryString, params, callback);
-	},
+	query: (queryString, params) => pool.query(queryString, params),
 };
