@@ -72,8 +72,8 @@ exports.signup = async function (req, res, next) {
 	if (firstname && lastname && phone && phone == decodedToken.phone) {
 		db.query('INSERT INTO users (firstname, lastname, phone) VALUES ($1, $2, $3)', [firstname, lastname, phone])
 			.then((result) => {
-				const token = jwt.sign({ firstName, lastname, phone }, jwtSecret, { algorithm: 'HS256', expiresIn: '24h' });
-				res.status(200).json({ firstName, lastname, phone, token });
+				const token = jwt.sign({ firstname, lastname, phone }, jwtSecret, { algorithm: 'HS256', expiresIn: '24h' });
+				res.status(200).json({ firstname, lastname, phone, token });
 			})
 			.catch((error) => {
 				console.error(error);
@@ -98,9 +98,9 @@ exports.login = async function (req, res, next) {
 		if (rows.length <= 0) {
 			res.status(401).json({ error: 'No user found' });
 		} else {
-			const { firstName, lastname } = rows[0];
-			const token = jwt.sign({ firstName, lastname, phone }, jwtSecret, { algorithm: 'HS256', expiresIn: '24h' });
-			res.status(200).json({ firstName, lastname, phone, token });
+			const { firstname, lastname } = rows[0];
+			const token = jwt.sign({ firstname, lastname, phone }, jwtSecret, { algorithm: 'HS256', expiresIn: '24h' });
+			res.status(200).json({ firstname, lastname, phone, token });
 		}
 	}
 };
