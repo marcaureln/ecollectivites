@@ -85,7 +85,7 @@ exports.signup = async function (req, res, next) {
 		const insertQueryResult = await db.query(insertQueryString, insertQueryParams);
 		const { user_id } = insertQueryResult.rows[0];
 		const token = jwt.sign({ user_id, firstname, lastname, phone }, jwtSecret, { expiresIn: '24h' });
-		res.status(200).json({ user_id, firstname, lastname, phone, token });
+		res.status(201).json({ user_id, firstname, lastname, phone, token });
 	} catch {
 		res.status(500).json({ error: 'Unable to sign you up' });
 	}
