@@ -38,6 +38,47 @@ exports.makeRequest = async function (req, res, next) {
 	}
 };
 
+exports.getRequest = async function (req, res, next) {
+	const userId = req.body.userId;
+	const numReq = req.params.numReq;
+
+	if (!userId || !numReq) {
+		return res.status(400).send();
+	}
+
+	try {
+		const queryResult = await db.query(
+			'SELECT num_req, reqstatus, reqtype, reqcreatedate, reqclosingdate, reqdescription, reqattachments, user_id, collect_id FROM request WHERE user_id = $1 AND num_req = $2',
+			[userId, numReq]
+		);
+		if (queryResult.rowCount < 1) {
+			res.status(404).send();
+		} else {
+			res.status(200).json(queryResult.rows[0]);
+		}
+	} catch {
+		res.status(500).send();
+	}
+};
+
+exports.getRequests = async function (req, res, next) {
+	const userId = req.body.userId;
+
+	if (!userId) {
+		return res.status(400).send();
+	}
+
+	try {
+		const queryResult = await db.query(
+			'SELECT num_req, reqstatus, reqtype, reqcreatedate, reqclosingdate, reqdescription, reqattachments, user_id, collect_id FROM request WHERE user_id = $1',
+			[userId]
+		);
+		res.status(200).json(queryResult.rows);
+	} catch {
+		res.status(500).send();
+	}
+};
+
 exports.requestTypes = function (req, res, next) {
 	let list = [];
 	for (let type in REQUEST_TYPE) {
