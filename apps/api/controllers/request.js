@@ -7,13 +7,13 @@ const REQUEST_STATUS = {
 	closed: 'FRERMÉ',
 };
 
-const REQUEST_TYPE = [
-	new RequestType('document', 'État civil'),
-	new RequestType('authorization', 'Autorisation'),
-	new RequestType('feedback', 'Commentaires'),
-	new RequestType('complaint', 'Plainte'),
-	new RequestType('other', 'Autre'),
-];
+const REQUEST_TYPE = {
+	document: 'État civil',
+	authorization: 'Autorisation',
+	feedback: 'Commentaires',
+	complaint: 'Plainte',
+	other: 'Autre',
+};
 
 exports.makeRequest = async function (req, res, next) {
 	const { userId, reqType, reqDesc, collectId } = req.body;
@@ -22,14 +22,14 @@ exports.makeRequest = async function (req, res, next) {
 		return res.status(400).send();
 	}
 
-	if (!isValidRequestType(reqType)) {
+	if (!REQUEST_TYPE[reqType]) {
 		return res.status(400).json({ error: 'Invalid request type' });
 	}
 
 	try {
 		const queryResult = await db.query(
 			'INSERT INTO request (reqstatus, reqtype, reqcreatedate, reqdescription, user_id, collect_id) VALUES ($1, $2, $3, $4, $5, $6) RETURNING num_req, reqstatus',
-			[REQUEST_STATUS.open, reqType, new Date(), reqDesc, userId, collectId]
+			[REQUEST_STATUS.open, REQUEST_TYPE[reqType], new Date(), reqDesc, userId, collectId]
 		);
 		const { num_req, reqstatus } = queryResult.rows[0];
 		res.status(201).json({ numReq: num_req, reqStatus: reqstatus });
@@ -39,18 +39,9 @@ exports.makeRequest = async function (req, res, next) {
 };
 
 exports.requestTypes = function (req, res, next) {
-	res.status(200).json(REQUEST_TYPE);
-};
-
-function RequestType(name, desc) {
-	return Object.freeze({ name, desc });
-}
-
-function isValidRequestType(reqType) {
-	for (let item of REQUEST_TYPE) {
-		if (item.name == reqType) {
-			return true;
-		}
+	let list = [];
+	for (let type in REQUEST_TYPE) {
+		list.push({ name: type, description: REQUEST_TYPE[type] });
 	}
-	return false;
-}
+	res.status(200).json(list);
+};
