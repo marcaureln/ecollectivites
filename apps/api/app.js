@@ -6,6 +6,7 @@ const app = express();
 
 const userRoutes = require('./routes/user');
 const collectiviteRoutes = require('./routes/collectivite');
+const requestRoutes = require('./routes/request');
 
 app.use(cors());
 app.use(express.json());
@@ -17,5 +18,6 @@ app.get('/', (req, res) => {
 
 app.use('/api/auth', userRoutes);
 app.use('/api/collectivite', collectiviteRoutes);
+app.use('/api/requests', requestRoutes);
 
 module.exports = app;
