@@ -4,7 +4,8 @@ const verifyServiceSid = process.env.TWILIO_VERIFY_SERVICE_SID;
 
 const twilio = require('twilio')(accountSid, authToken);
 
-const jwtSecret = process.env.JWT_SECRET;
+const jwtAuthSecret = process.env.JWT_AUTH_SECRET;
+const jwtVerifySecret = process.env.JWT_VERIFY_SECRET;
 const jwt = require('jsonwebtoken');
 
 const db = require('../helpers/db');
@@ -40,7 +41,7 @@ exports.check = function (req, res, next) {
 		.verificationChecks.create({ to: '+225' + phone, code: code })
 		.then((verificationCheck) => {
 			if (verificationCheck.status == 'approved') {
-				const token = jwt.sign({ phone }, jwtSecret, { expiresIn: '10m' });
+				const token = jwt.sign({ phone }, jwtVerifySecret, { expiresIn: '10m' });
 				res.status(200).json({ phone, token });
 			} else if (verificationCheck.status == 'canceled') {
 				res.status(404).json({ message: 'Verification cancelled!' });
@@ -57,7 +58,7 @@ exports.signup = async function (req, res, next) {
 	const decodedToken = (function () {
 		try {
 			const token = req.headers.authorization.split(' ')[1];
-			return jwt.decode(token, jwtSecret);
+			return jwt.verify(token, jwtVerifySecret);
 		} catch {
 			return undefined;
 		}
@@ -84,7 +85,7 @@ exports.signup = async function (req, res, next) {
 		const insertQueryParams = [firstname, lastname, phone];
 		const insertQueryResult = await db.query(insertQueryString, insertQueryParams);
 		const { user_id } = insertQueryResult.rows[0];
-		const token = jwt.sign({ user_id, firstname, lastname, phone }, jwtSecret, { expiresIn: '24h' });
+		const token = jwt.sign({ user_id, firstname, lastname, phone }, jwtAuthSecret, { expiresIn: '24h' });
 		res.status(201).json({ user_id, firstname, lastname, phone, token });
 	} catch {
 		res.status(500).json({ error: 'Unable to sign you up' });
@@ -95,7 +96,7 @@ exports.login = async function (req, res, next) {
 	const decodedToken = (function () {
 		try {
 			const token = req.headers.authorization.split(' ')[1];
-			return jwt.decode(token, jwtSecret);
+			return jwt.verify(token, jwtVerifySecret);
 		} catch {
 			return undefined;
 		}
@@ -117,7 +118,7 @@ exports.login = async function (req, res, next) {
 		res.status(401).json({ error: 'No user found' });
 	} else {
 		const { user_id, firstname, lastname } = rows[0];
-		const token = jwt.sign({ user_id, firstname, lastname, phone }, jwtSecret, { expiresIn: '24h' });
+		const token = jwt.sign({ user_id, firstname, lastname, phone }, jwtAuthSecret, { expiresIn: '24h' });
 		res.status(200).json({ user_id, firstname, lastname, phone, token });
 	}
 };
