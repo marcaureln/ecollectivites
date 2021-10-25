@@ -16,20 +16,20 @@ const REQUEST_TYPE = {
 };
 
 exports.makeRequest = async function (req, res, next) {
-	const { userId, reqType, reqDesc, collectId } = req.body;
+	const { user_id, reqtype, reqdesc, collect_id } = req.body;
 
-	if (!userId || !reqType || !reqDesc || !collectId) {
+	if (!user_id || !reqtype || !reqdesc || !collect_id) {
 		return res.status(400).send();
 	}
 
-	if (!REQUEST_TYPE[reqType]) {
+	if (!REQUEST_TYPE[reqtype]) {
 		return res.status(400).json({ error: 'Invalid request type' });
 	}
 
 	try {
 		const queryResult = await db.query(
 			'INSERT INTO request (reqstatus, reqtype, reqcreatedate, reqdescription, user_id, collect_id) VALUES ($1, $2, $3, $4, $5, $6) RETURNING num_req, reqstatus',
-			[REQUEST_STATUS.open, REQUEST_TYPE[reqType], new Date(), reqDesc, userId, collectId]
+			[REQUEST_STATUS.open, REQUEST_TYPE[reqtype], new Date(), reqdesc, user_id, collect_id]
 		);
 		const { num_req, reqstatus } = queryResult.rows[0];
 		res.status(201).json({ numReq: num_req, reqStatus: reqstatus });
@@ -39,17 +39,17 @@ exports.makeRequest = async function (req, res, next) {
 };
 
 exports.getRequest = async function (req, res, next) {
-	const userId = req.body.userId;
-	const numReq = req.params.numReq;
+	const user_id = req.body.user_id;
+	const num_req = req.params.numreq;
 
-	if (!userId || !numReq) {
+	if (!user_id || !num_req) {
 		return res.status(400).send();
 	}
 
 	try {
 		const queryResult = await db.query(
 			'SELECT num_req, reqstatus, reqtype, reqcreatedate, reqclosingdate, reqdescription, reqattachments, user_id, collect_id FROM request WHERE user_id = $1 AND num_req = $2',
-			[userId, numReq]
+			[user_id, num_req]
 		);
 		if (queryResult.rowCount < 1) {
 			res.status(404).send();
@@ -62,16 +62,16 @@ exports.getRequest = async function (req, res, next) {
 };
 
 exports.getRequests = async function (req, res, next) {
-	const userId = req.body.userId;
+	const user_id = req.body.user_id;
 
-	if (!userId) {
+	if (!user_id) {
 		return res.status(400).send();
 	}
 
 	try {
 		const queryResult = await db.query(
 			'SELECT num_req, reqstatus, reqtype, reqcreatedate, reqclosingdate, reqdescription, reqattachments, user_id, collect_id FROM request WHERE user_id = $1',
-			[userId]
+			[user_id]
 		);
 		res.status(200).json(queryResult.rows);
 	} catch {
@@ -82,7 +82,7 @@ exports.getRequests = async function (req, res, next) {
 exports.requestTypes = function (req, res, next) {
 	let list = [];
 	for (let type in REQUEST_TYPE) {
-		list.push({ name: type, description: REQUEST_TYPE[type] });
+		list.push({ name: type, desc: REQUEST_TYPE[type] });
 	}
 	res.status(200).json(list);
 };
