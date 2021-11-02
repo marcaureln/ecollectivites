@@ -115,7 +115,7 @@ exports.login = async function (req, res, next) {
 	const { rows } = await db.query('SELECT * FROM users WHERE phone = $1', [phone]);
 
 	if (rows.length <= 0) {
-		res.status(401).json({ error: 'No user found' });
+		res.status(404).json({ error: 'No user found' });
 	} else {
 		const { user_id, firstname, lastname } = rows[0];
 		const token = jwt.sign({ user_id, firstname, lastname, phone }, jwtAuthSecret, { expiresIn: '24h' });
