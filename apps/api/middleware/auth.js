@@ -11,7 +11,10 @@ exports.userAuth = (req, res, next) => {
 
 		const decodedToken = jwt.verify(token, jwtAuthSecret);
 
-		if (req.body.user_id && req.body.user_id !== decodedToken.user_id) {
+		if (
+			(req.body.user_id && req.body.user_id !== decodedToken.user_id) ||
+			(req.query.user_id && req.query.user_id !== decodedToken.user_id)
+		) {
 			res.status(401).send();
 		} else {
 			next();

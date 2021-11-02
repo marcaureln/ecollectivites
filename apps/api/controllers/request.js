@@ -39,7 +39,7 @@ exports.makeRequest = async function (req, res, next) {
 };
 
 exports.getRequest = async function (req, res, next) {
-	const user_id = req.body.user_id;
+	const user_id = req.query.user_id;
 	const num_req = req.params.numreq;
 
 	if (!user_id || !num_req) {
@@ -62,7 +62,7 @@ exports.getRequest = async function (req, res, next) {
 };
 
 exports.getRequests = async function (req, res, next) {
-	const user_id = req.body.user_id;
+	const user_id = req.query.user_id;
 
 	if (!user_id) {
 		return res.status(400).send();
@@ -70,7 +70,7 @@ exports.getRequests = async function (req, res, next) {
 
 	try {
 		const queryResult = await db.query(
-			'SELECT num_req, reqstatus, reqtype, reqcreatedate, reqclosingdate, reqdescription, reqattachments, user_id, collect_id FROM request WHERE user_id = $1',
+			'SELECT num_req, reqstatus, reqtype, reqcreatedate, reqclosingdate, reqdescription, reqattachments, user_id, request.collect_id, collectname FROM request LEFT JOIN collectivite ON request.collect_id = collectivite.collect_id WHERE user_id = $1',
 			[user_id]
 		);
 		res.status(200).json(queryResult.rows);
