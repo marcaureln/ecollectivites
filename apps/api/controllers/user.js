@@ -1,8 +1,7 @@
-const accountSid = process.env.TWILIO_ACCOUNT_SID;
-const authToken = process.env.TWILIO_AUTH_TOKEN;
-const verifyServiceSid = process.env.TWILIO_VERIFY_SERVICE_SID;
-
-const twilio = require('twilio')(accountSid, authToken);
+const twilioAccountSid = process.env.TWILIO_ACCOUNT_SID;
+const twilioAuthToken = process.env.TWILIO_AUTH_TOKEN;
+const twilioVerifyServiceSid = process.env.TWILIO_VERIFY_SERVICE_SID;
+const twilio = require('twilio')(twilioAccountSid, twilioAuthToken);
 
 const jwtAuthSecret = process.env.JWT_AUTH_SECRET;
 const jwtVerifySecret = process.env.JWT_VERIFY_SECRET;
@@ -20,7 +19,7 @@ exports.verify = function (req, res, next) {
 	}
 
 	twilio.verify
-		.services(verifyServiceSid)
+		.services(twilioVerifyServiceSid)
 		.verifications.create({ to: '+225' + phone, channel: 'sms', locale: 'fr' })
 		.then((verification) => {
 			res.status(200).json({ message: 'Verification code sended to ' + verification.to });
@@ -39,7 +38,7 @@ exports.check = function (req, res, next) {
 	}
 
 	twilio.verify
-		.services(verifyServiceSid)
+		.services(twilioVerifyServiceSid)
 		.verificationChecks.create({ to: '+225' + phone, code: code })
 		.then((verificationCheck) => {
 			if (verificationCheck.status == 'approved') {
