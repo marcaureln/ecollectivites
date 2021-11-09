@@ -6,6 +6,8 @@ const twilio = require('twilio')(accountSid, authToken);
 
 const jwtAuthSecret = process.env.JWT_AUTH_SECRET;
 const jwtVerifySecret = process.env.JWT_VERIFY_SECRET;
+const jwtAuthTokenValidity = process.env.JWT_AUTH_TOKEN_VALIDITY;
+const jwtVerifyTokenValidity = process.env.JWT_VERIFY_TOKEN_VALIDITY;
 const jwt = require('jsonwebtoken');
 
 const db = require('../helpers/db');
@@ -41,7 +43,7 @@ exports.check = function (req, res, next) {
 		.verificationChecks.create({ to: '+225' + phone, code: code })
 		.then((verificationCheck) => {
 			if (verificationCheck.status == 'approved') {
-				const token = jwt.sign({ phone }, jwtVerifySecret, { expiresIn: '10m' });
+				const token = jwt.sign({ phone }, jwtVerifySecret, { expiresIn: jwtVerifyTokenValidity });
 				res.status(200).json({ phone, token });
 			} else if (verificationCheck.status == 'canceled') {
 				res.status(404).json({ message: 'Verification cancelled!' });
@@ -118,7 +120,7 @@ exports.login = async function (req, res, next) {
 		res.status(404).json({ error: 'No user found' });
 	} else {
 		const { user_id, firstname, lastname } = rows[0];
-		const token = jwt.sign({ user_id, firstname, lastname, phone }, jwtAuthSecret, { expiresIn: '24h' });
+		const token = jwt.sign({ user_id, firstname, lastname, phone }, jwtAuthSecret, { expiresIn: jwtAuthTokenValidity });
 		res.status(200).json({ user_id, firstname, lastname, phone, token });
 	}
 };
