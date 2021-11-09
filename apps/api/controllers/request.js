@@ -10,6 +10,9 @@ const REQUEST_STATUS = {
 const REQUEST_TYPE = {
 	document: 'État civil',
 	authorization: 'Autorisation',
+	write_to_mayor: 'Écrire au maire',
+	report_incident: 'Signaler un incident',
+	question: 'Poser une question',
 	feedback: 'Commentaires',
 	complaint: 'Plainte',
 	other: 'Autre',
