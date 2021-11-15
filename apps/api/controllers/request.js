@@ -19,7 +19,7 @@ const REQUEST_TYPE = {
 };
 
 exports.makeRequest = async function (req, res, next) {
-	const { user_id, reqtype, reqdesc, collect_id } = req.body;
+	const { user_id, reqtype, reqdesc, collect_id } = JSON.parse(req.body.data);
 
 	if (!user_id || !reqtype || !reqdesc || !collect_id) {
 		return res.status(400).send();
@@ -29,10 +29,16 @@ exports.makeRequest = async function (req, res, next) {
 		return res.status(400).json({ error: 'Invalid request type' });
 	}
 
+	let reqattachements = '';
+
+	for (const file of req.files) {
+		reqattachements += file.path + ';';
+	}
+
 	try {
 		const queryResult = await db.query(
-			'INSERT INTO request (reqstatus, reqtype, reqcreatedate, reqdescription, user_id, collect_id) VALUES ($1, $2, $3, $4, $5, $6) RETURNING num_req, reqstatus',
-			[REQUEST_STATUS.open, REQUEST_TYPE[reqtype], new Date(), reqdesc, user_id, collect_id]
+			'INSERT INTO request (reqstatus, reqtype, reqcreatedate, reqdescription, reqattachments, user_id, collect_id) VALUES ($1, $2, $3, $4, $5, $6, $7) RETURNING num_req, reqstatus',
+			[REQUEST_STATUS.open, REQUEST_TYPE[reqtype], new Date(), reqdesc, reqattachements, user_id, collect_id]
 		);
 		const { num_req, reqstatus } = queryResult.rows[0];
 		res.status(201).json({ numReq: num_req, reqStatus: reqstatus });
