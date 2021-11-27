@@ -119,3 +119,8 @@ dist
 
 # File upload
 uploads/
+
+# Docker
+.dockerignore
+Dockerfile
+docker-compose.yaml
