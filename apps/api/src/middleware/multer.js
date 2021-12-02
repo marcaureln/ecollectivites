@@ -2,7 +2,7 @@ const multer = require('multer');
 const fs = require('fs');
 const { v4: uuidv4 } = require('uuid');
 
-const destination = 'uploads';
+const destination = process.env.UPLOAD_DEST || '/uploads';
 
 if (!fs.existsSync(destination)) {
 	fs.mkdirSync(destination);

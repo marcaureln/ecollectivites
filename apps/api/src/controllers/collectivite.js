@@ -8,7 +8,7 @@ exports.getCollectivite = async function (req, res, next) {
 	}
 
 	const queryResult = await db.query(
-		'SELECT collect_id, collectname, collecttype FROM collectivite WHERE collect_id = $1',
+		'SELECT collect_id, collectname, collecttype FROM collectivite, collectivite_type WHERE collect_id = $1 AND collecttype = collectivite_type.collect_type_id',
 		[collect_id]
 	);
 
@@ -21,19 +21,25 @@ exports.getCollectivite = async function (req, res, next) {
 };
 
 exports.getCommunes = async function (req, res, next) {
-	const queryResult = await db.query("SELECT collect_id, collectname FROM collectivite WHERE collecttype = 'Commune'");
+	const queryResult = await db.query(
+		"SELECT collect_id, collectname FROM collectivite, collectivite_type WHERE collecttype = collectivite_type.collect_type_id AND labelcollecttype = 'Commune'"
+	);
 	const communes = queryResult.rows;
 	res.status(200).json(communes);
 };
 
 exports.getRegions = async function (req, res, next) {
-	const queryResult = await db.query("SELECT collect_id, collectname FROM collectivite WHERE collecttype = 'Région'");
+	const queryResult = await db.query(
+		"SELECT collect_id, collectname FROM collectivite, collectivite_type WHERE collecttype = collectivite_type.collect_type_id AND labelcollecttype = 'Région'"
+	);
 	const regions = queryResult.rows;
 	res.status(200).json(regions);
 };
 
 exports.getAll = async function (req, res, next) {
-	const queryResult = await db.query('SELECT collect_id, collectname, collecttype FROM collectivite');
+	const queryResult = await db.query(
+		'SELECT collect_id, collectname, labelcollecttype AS collecttype  FROM collectivite, collectivite_type WHERE collecttype = collectivite_type.collect_type_id'
+	);
 	const collectivites = queryResult.rows;
 	res.status(200).json(collectivites);
 };
