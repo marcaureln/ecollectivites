@@ -4,7 +4,8 @@
 	"description": "",
 	"main": "server.js",
 	"scripts": {
-		"test": "echo \"Error: no test specified\" && exit 1"
+		"dev": "nodemon server.js",
+		"start": "node server.js"
 	},
 	"author": "Alex Marc-Aurel N'Guessan",
 	"license": "UNLICENSED",
@@ -18,5 +19,8 @@
 		"pg": "^8.7.1",
 		"twilio": "^3.69.0",
 		"uuid": "^8.3.2"
+	},
+	"devDependencies": {
+		"nodemon": "^2.0.15"
 	}
 }
