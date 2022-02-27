@@ -121,6 +121,6 @@ dist
 uploads/
 
 # Docker
-.dockerignore
-Dockerfile
-docker-compose.yaml
+# .dockerignore
+# Dockerfile
+# docker-compose.yaml
