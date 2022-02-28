@@ -17,6 +17,7 @@ exports.userAuth = (req, res, next) => {
 		) {
 			res.status(401).send();
 		} else {
+			req.auth = { userId: decodedToken.user_id };
 			next();
 		}
 	} catch {

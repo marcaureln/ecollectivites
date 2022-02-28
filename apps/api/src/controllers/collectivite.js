@@ -1,4 +1,7 @@
-const db = require('../helpers/db');
+const { PrismaClient } = require('@prisma/client');
+
+/** @type { PrismaClient } **/
+const prisma = require('../helpers/prisma').default;
 
 exports.getCollectivite = async function (req, res, next) {
 	const collect_id = parseInt(req.params.id);
@@ -7,39 +10,51 @@ exports.getCollectivite = async function (req, res, next) {
 		return res.status(400).send();
 	}
 
-	const queryResult = await db.query(
-		'SELECT collect_id, collectname, collecttype FROM collectivite, collectivite_type WHERE collect_id = $1 AND collecttype = collectivite_type.collect_type_id',
-		[collect_id]
-	);
+	const collectivite = await prisma.collectivite.findUnique({
+		where: {
+			collectId: collect_id,
+		},
+	});
 
-	if (queryResult.rowCount <= 0) {
+	if (!collectivite) {
 		return res.status(404).send();
 	}
 
-	const collectivite = queryResult.rows[0];
 	res.status(200).json(collectivite);
 };
 
 exports.getCommunes = async function (req, res, next) {
-	const queryResult = await db.query(
-		"SELECT collect_id, collectname FROM collectivite, collectivite_type WHERE collecttype = collectivite_type.collect_type_id AND labelcollecttype = 'Commune'"
-	);
-	const communes = queryResult.rows;
+	const communes = await prisma.collectivite.findMany({
+		where: {
+			collectType: {
+				collectTypeLabel: 'Commune',
+			},
+		},
+		orderBy: {
+			collectId: 'asc',
+		},
+	});
+
 	res.status(200).json(communes);
 };
 
 exports.getRegions = async function (req, res, next) {
-	const queryResult = await db.query(
-		"SELECT collect_id, collectname FROM collectivite, collectivite_type WHERE collecttype = collectivite_type.collect_type_id AND labelcollecttype = 'Région'"
-	);
-	const regions = queryResult.rows;
+	const regions = await prisma.collectivite.findMany({
+		where: {
+			collectType: {
+				collectTypeLabel: 'Région',
+			},
+		},
+		orderBy: {
+			collectId: 'asc',
+		},
+	});
+
 	res.status(200).json(regions);
 };
 
 exports.getAll = async function (req, res, next) {
-	const queryResult = await db.query(
-		'SELECT collect_id, collectname, labelcollecttype AS collecttype  FROM collectivite, collectivite_type WHERE collecttype = collectivite_type.collect_type_id'
-	);
-	const collectivites = queryResult.rows;
+	const collectivites = await prisma.collectivite.findMany();
+
 	res.status(200).json(collectivites);
 };
