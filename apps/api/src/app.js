@@ -5,10 +5,9 @@ const cors = require('cors');
 const path = require('path');
 const app = express();
 
-const userRoutes = require('./routes/user');
+const authRoutes = require('./routes/auth');
 const collectiviteRoutes = require('./routes/collectivite');
 const requestRoutes = require('./routes/request');
-const agentRoutes = require('./routes/agent');
 
 app.use(cors());
 app.use(express.json());
@@ -19,9 +18,8 @@ app.get('/', (req, res) => {
 	res.send('hello world');
 });
 
-app.use('/api/auth', userRoutes);
+app.use('/api/auth', authRoutes);
 app.use('/api/collectivites', collectiviteRoutes);
 app.use('/api/requests', requestRoutes);
-app.use('/api/agents', agentRoutes);
 
 module.exports = app;

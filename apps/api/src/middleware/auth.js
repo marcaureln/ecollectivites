@@ -1,7 +1,7 @@
 const jwt = require('jsonwebtoken');
-const jwtAuthSecret = process.env.JWT_AUTH_SECRET;
+const JWT_SECRET = process.env.JWT_AUTH_SECRET;
 
-exports.userAuth = (req, res, next) => {
+module.exports = function auth(req, res, next) {
 	try {
 		const token = req.headers.authorization.split(' ')[1];
 
@@ -9,15 +9,12 @@ exports.userAuth = (req, res, next) => {
 			return res.status(403).send();
 		}
 
-		const decodedToken = jwt.verify(token, jwtAuthSecret);
+		const decodedToken = jwt.verify(token, JWT_SECRET);
 
-		if (
-			(req.body.user_id && req.body.user_id !== decodedToken.user_id) ||
-			(req.query.user_id && req.query.user_id !== decodedToken.user_id)
-		) {
+		if (!decodedToken.userId) {
 			res.status(401).send();
 		} else {
-			req.auth = { userId: decodedToken.user_id };
+			req.auth = { userId: decodedToken.userId };
 			next();
 		}
 	} catch {
