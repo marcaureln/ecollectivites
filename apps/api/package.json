@@ -4,12 +4,14 @@
 	"description": "",
 	"main": "server.js",
 	"scripts": {
+		"load-fixtures": "npx prisma migrate reset --force && node src/fixtures/fixtures.js",
 		"dev": "nodemon server.js",
 		"start": "node server.js"
 	},
 	"author": "Alex Marc-Aurel N'Guessan",
 	"license": "UNLICENSED",
 	"dependencies": {
+		"@prisma/client": "^3.10.0",
 		"bcrypt": "^5.0.1",
 		"cors": "^2.8.5",
 		"dotenv": "^8.2.0",
