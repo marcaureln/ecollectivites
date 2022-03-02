@@ -57,25 +57,6 @@ exports.getRequest = async function (req, res, next) {
 	}
 };
 
-exports.getRequests = async function (req, res, next) {
-	const userId = req.auth.userId;
-
-	try {
-		const requests = await prisma.request.findMany({
-			where: {
-				userId: userId,
-			},
-			orderBy: {
-				reqCreatedAt: 'desc',
-			},
-		});
-
-		res.status(200).json(requests);
-	} catch {
-		res.status(500).send();
-	}
-};
-
 exports.getRequestResponses = async function (req, res, next) {
 	const userId = req.auth.userId;
 	const reqId = req.params.reqId;

@@ -6,7 +6,6 @@ const multer = require('../middleware/multer');
 const requestController = require('../controllers/request');
 
 router.post('/', auth, multer, requestController.makeRequest);
-router.get('/', auth, requestController.getRequests);
 router.get('/types', requestController.requestTypes);
 router.get('/status', requestController.requestStatus);
 router.get('/:reqId', auth, requestController.getRequest);
