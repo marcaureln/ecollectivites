@@ -76,10 +76,41 @@ exports.getRequests = async function (req, res, next) {
 	}
 };
 
+exports.getRequestResponses = async function (req, res, next) {
+	const userId = req.auth.userId;
+	const reqId = req.params.reqId;
+
+	try {
+		const user = await prisma.user.findUnique({ where: { userId: userId } });
+		const request = await prisma.request.findUnique({ where: { reqId } });
+		console.log(request.responses);
+		const responses = await prisma.response.findMany({ where: { reqId } });
+
+		if (!request) {
+			res.status(404).send();
+		} else if (request.userId !== userId || !['ADMIN', 'AGENT'].includes(user.role)) {
+			res.status(401).send();
+		} else {
+			res.status(200).json(responses);
+		}
+	} catch {
+		res.status(500).send();
+	}
+};
+
 exports.requestTypes = async function (req, res, next) {
 	try {
 		const requestTypes = await prisma.requestType.findMany();
 		res.status(200).json(requestTypes);
+	} catch {
+		res.status(500).send();
+	}
+};
+
+exports.requestStatus = async function (req, res, next) {
+	try {
+		const requestStatus = await prisma.requestStatus.findMany();
+		res.status(200).json(requestStatus);
 	} catch {
 		res.status(500).send();
 	}
