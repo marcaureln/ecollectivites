@@ -3,6 +3,8 @@ require('dotenv').config();
 const express = require('express');
 const cors = require('cors');
 const path = require('path');
+const { errorLogger, errorHandler, routeNotFound } = require('./helpers/error');
+
 const app = express();
 
 const authRoutes = require('./routes/auth');
@@ -27,5 +29,8 @@ app.use('/api/requests', requestRoutes);
 app.use('/api/responses', responseRoutes);
 app.use('/api/users', userRoutes);
 app.use('/api/me', myRoutes);
+app.use(routeNotFound);
+app.use(errorLogger);
+app.use(errorHandler);
 
 module.exports = app;
