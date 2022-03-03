@@ -11,7 +11,7 @@ services:
     env_file:
       - .env
     environment:
-      - PRISMA_DATABASE_URL=postgresql://postgres:admin@postgres:5432/prisma?schema=public
+      - DATABASE_URL=postgresql://postgres:admin@postgres:5432/prisma?schema=public
     depends_on:
       - postgres
   
