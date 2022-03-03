@@ -11,6 +11,7 @@ exports.routeNotFound = (req, res, next) => {
 };
 
 exports.errorLogger = (err, req, res, next) => {
+	console.log(`${req.method} ${req.path} \x1b[33m${err.status || 500}\x1b[0m`);
 	console.error(err.stack);
 	next(err);
 };
