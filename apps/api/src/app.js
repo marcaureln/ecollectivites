@@ -17,7 +17,7 @@ const myRoutes = require('./routes/me');
 app.use(cors());
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
-app.use('/uploads', express.static(process.env.UPLOAD_DEST));
+app.use('/static', express.static(path.join(__dirname, '../public')));
 app.use('/api/auth', authRoutes);
 app.use('/api/collectivites', collectiviteRoutes);
 app.use('/api/requests', requestRoutes);

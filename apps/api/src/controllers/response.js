@@ -13,7 +13,7 @@ exports.makeResponse = async function (req, res, next) {
 			throw AppError(400, 'Missing required fields');
 		}
 
-		const resAttachments = req.files.reduce((prev, current) => (prev += current.path + ';'), '');
+		const resAttachments = req.files.reduce((prev, current) => (prev += `static/uploads/${current.filename};`), '');
 		const request = await prisma.request.findUnique({ where: { reqId } });
 
 		if (!request) {
