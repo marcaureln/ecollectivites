@@ -5,6 +5,7 @@ const VERIFY_JWT_SECRET = process.env.JWT_VERIFY_SECRET;
 const { PrismaClient } = require('@prisma/client');
 const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
+const { AppError } = require('../helpers/error');
 
 /**  @type { PrismaClient } */
 const prisma = require('../helpers/prisma').default;
@@ -17,31 +18,36 @@ exports.login = async function (req, res, next) {
 	} else if (method === 'phone') {
 		phoneLogin(req, res, next);
 	} else {
-		return res.status(400).json({ error: 'No authentication method provided' });
+		const error = new AppError(400, 'No authentication method provided');
+		next(error);
 	}
 };
 
 async function emailLogin(req, res, next) {
 	const { email, password } = req.body;
 
-	if (!email || !password) {
-		return res.status(400).send();
-	}
+	try {
+		if (!email || !password) {
+			throw new AppError(400, 'Missing required fields');
+		}
 
-	const user = await prisma.user.findUnique({ where: { email } });
+		const user = await prisma.user.findUnique({ where: { email } });
 
-	if (!user) {
-		return res.status(404).json({ error: 'Incorrect email or password' });
-	}
+		if (!user) {
+			throw new AppError(404, 'Incorrect email or password');
+		}
 
-	const match = await bcrypt.compare(password, user.password);
+		const match = await bcrypt.compare(password, user.password);
 
-	if (match) {
-		const { userId, firstname, lastname, role, email, collectId } = user;
-		const token = jwt.sign({ userId }, JWT_SECRET, { expiresIn: JWT_VALIDITY });
-		res.status(200).json({ userId, firstname, lastname, role, email, collectId, token });
-	} else {
-		res.status(404).json({ error: 'Incorrect email or password' });
+		if (match) {
+			delete user.password;
+			user.token = jwt.sign({ userId }, JWT_SECRET, { expiresIn: JWT_VALIDITY });
+			res.status(200).json(user);
+		} else {
+			throw new AppError(404, 'Incorrect email or password');
+		}
+	} catch (error) {
+		next(error);
 	}
 }
 
@@ -55,24 +61,28 @@ async function phoneLogin(req, res, next) {
 		}
 	})();
 
-	if (!decodedToken) {
-		return res.status(401).json({ error: 'Invalid phone verification token' });
-	}
+	try {
+		if (!decodedToken) {
+			return res.status(401).json({ error: 'Invalid phone verification token' });
+		}
 
-	const phone = decodedToken.phone;
+		const phone = decodedToken.phone;
 
-	if (req.body.phone && req.body.phone !== phone) {
-		return res.status(400).json({ error: 'Invalid phone number' });
-	}
+		if (req.body.phone && req.body.phone !== phone) {
+			throw new AppError(400, 'Invalid phone number');
+		}
 
-	const user = await prisma.user.findUnique({ where: { phone } });
+		const user = await prisma.user.findUnique({ where: { phone } });
 
-	if (!user) {
-		res.status(404).json({ error: 'No user found' });
-	} else {
-		const { userId, firstname, lastname, role, phone, collectId } = user;
-		const token = jwt.sign({ userId, firstname, lastname, phone }, JWT_SECRET, { expiresIn: JWT_VALIDITY });
-		res.status(200).json({ userId, firstname, lastname, role, phone, collectId, token });
+		if (!user) {
+			throw new AppError(404, 'No user found');
+		} else {
+			delete user.password;
+			user.token = jwt.sign({ userId, firstname, lastname, phone }, JWT_SECRET, { expiresIn: JWT_VALIDITY });
+			res.status(200).json(user);
+		}
+	} catch (error) {
+		next(error);
 	}
 }
 
@@ -84,20 +94,21 @@ exports.signup = async function (req, res, next) {
 	} else if (method === 'phone') {
 		phoneSignup(req, res, next);
 	} else {
-		return res.status(400).json({ error: 'No authentication method provided' });
+		const error = new AppError(400, 'No authentication method provided');
+		next(error);
 	}
 };
 
 async function emailSignup(req, res, next) {
 	const { firstname, lastname, email, password, collectId } = req.body;
 
-	if (!firstname || !lastname || !email || !password || !collectId) {
-		return res.status(400).json({ error: 'Missing required fields' });
-	}
-
 	try {
+		if (!firstname || !lastname || !email || !password || !collectId) {
+			throw new AppError(400, 'Missing required fields');
+		}
+
 		if (await prisma.user.findUnique({ where: { email } })) {
-			return res.status(400).json({ error: 'Email already in use' });
+			throw new AppError(400, 'Email already in use');
 		}
 
 		const hashedPassword = await bcrypt.hash(password, 10);
@@ -117,7 +128,7 @@ async function emailSignup(req, res, next) {
 		delete user.password;
 		res.status(201).json(user);
 	} catch (error) {
-		res.status(500).json({ error: 'Internal server error' });
+		next(error);
 	}
 }
 
@@ -131,25 +142,25 @@ async function phoneSignup(req, res, next) {
 		}
 	})();
 
-	if (!decodedToken) {
-		return res.status(401).json({ error: 'Invalid phone verification token' });
-	}
-
-	const phone = decodedToken.phone;
-
-	if (req.body.phone && req.body.phone !== phone) {
-		return res.status(400).json({ error: 'Invalid phone number' });
-	}
-
-	const { firstname, lastname, collectId } = req.body;
-
-	if (!firstname || !lastname || !collectId) {
-		return res.status(400).json({ error: 'Missing required fields' });
-	}
-
 	try {
+		if (!decodedToken) {
+			throw new AppError(401, 'Invalid phone verification token');
+		}
+
+		const phone = decodedToken.phone;
+
+		if (req.body.phone && req.body.phone !== phone) {
+			throw new AppError(400, 'Invalid phone number');
+		}
+
+		const { firstname, lastname, collectId } = req.body;
+
+		if (!firstname || !lastname || !collectId) {
+			throw new AppError(400, 'Missing required fields');
+		}
+
 		if (await prisma.user.findUnique({ where: { phone } })) {
-			return res.status(400).json({ error: 'Phone number already in use' });
+			throw new AppError(400, 'Phone number already in use');
 		}
 
 		const user = await prisma.user.create({
@@ -162,8 +173,9 @@ async function phoneSignup(req, res, next) {
 			},
 		});
 
+		delete user.password;
 		res.status(201).json(user);
 	} catch (error) {
-		res.status(500).json({ error: 'Internal server error' });
+		next(error);
 	}
 }
