@@ -102,7 +102,21 @@ exports.getCollectiviteUsers = async function (req, res, next) {
 			throw new AppError(403, 'Forbidden');
 		}
 
-		const users = await prisma.user.findMany({ where: { collectId } });
+		const users = await prisma.user.findMany({
+			where: {
+				collectId,
+				role: { in: ['ADMIN', 'AGENT'] },
+			},
+			select: {
+				userId: true,
+				firstname: true,
+				lastname: true,
+				phone: true,
+				email: true,
+				collectId: true,
+				role: true,
+			},
+		});
 		res.status(200).json(users);
 	} catch (error) {
 		next(error);
