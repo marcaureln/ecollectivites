@@ -1,4 +1,5 @@
 const { PrismaClient } = require('@prisma/client');
+const { ac } = require('../helpers/accesscontrol');
 const { AppError } = require('../helpers/error');
 
 /** @type { PrismaClient } **/
@@ -48,11 +49,16 @@ exports.getRequest = async function (req, res, next) {
 
 		if (!request) {
 			throw new AppError(404, 'Request not found');
-		} else if (request.userId !== userId || !['ADMIN', 'AGENT'].includes(user.role)) {
-			throw new AppError(403, 'Forbidden');
-		} else {
-			res.status(200).json(request);
 		}
+
+		const isOwn = request.userId === user.userId || (await isSameCollectivite(user, request.userId));
+		const permission = isOwn ? ac.can(req.auth.role).readOwn('request') : ac.can(req.auth.role).readAny('request');
+
+		if (!permission.granted) {
+			throw new AppError(403, 'Forbidden');
+		}
+
+		res.status(200).json(request);
 	} catch (error) {
 		next(error);
 	}
@@ -63,17 +69,22 @@ exports.getRequestResponses = async function (req, res, next) {
 	const reqId = req.params.reqId;
 
 	try {
-		const user = await prisma.user.findUnique({ where: { userId: userId } });
+		const user = await prisma.user.findUnique({ where: { userId } });
 		const request = await prisma.request.findUnique({ where: { reqId } });
 		const responses = await prisma.response.findMany({ where: { reqId } });
 
 		if (!request) {
 			throw new AppError(404, 'Request not found');
-		} else if (request.userId !== userId || !['ADMIN', 'AGENT'].includes(user.role)) {
-			throw new AppError(403, 'Forbidden');
-		} else {
-			res.status(200).json(responses);
 		}
+
+		const isOwn = request.userId === user.userId || (await isSameCollectivite(user, request.userId));
+		const permission = isOwn ? ac.can(req.auth.role).readOwn('request') : ac.can(req.auth.role).readAny('request');
+
+		if (!permission.granted) {
+			throw new AppError(403, 'Forbidden');
+		}
+
+		res.status(200).json(responses);
 	} catch (error) {
 		next(error);
 	}

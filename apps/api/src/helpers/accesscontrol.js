@@ -12,7 +12,12 @@ ac.grant('USER')
 	.readOwn('account', ['*', '!password'])
 	.updateOwn('account', ['*', '!role']);
 
-ac.grant('AGENT').extend('USER').updateOwn('account', ['!collectId', '!role']);
+ac.grant('AGENT')
+	.extend('USER')
+	.updateOwn('account', ['!collectId', '!role'])
+	.readAny('request')
+	.readAny('response')
+	.readAny('account');
 
 ac.grant('ADMIN').extend(['AGENT']).createOwn('account').updateOwn('account', ['*']).updateOwn('collectivite');
 

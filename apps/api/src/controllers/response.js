@@ -1,4 +1,5 @@
 const { PrismaClient } = require('@prisma/client');
+const { ac } = require('../helpers/accesscontrol');
 const { AppError } = require('../helpers/error');
 
 /** @type { PrismaClient } **/
@@ -49,11 +50,16 @@ exports.getResponse = async function (req, res, next) {
 
 		if (!response) {
 			throw new AppError(404, 'Response not found');
-		} else if (response.userId !== userId || !['ADMIN', 'AGENT'].includes(user.role)) {
-			throw new AppError(403, 'Forbidden');
-		} else {
-			res.status(200).json(response);
 		}
+
+		const isOwn = response.userId === user.userId || (await isSameCollectivite(user, response.userId));
+		const permission = isOwn ? ac.can(req.auth.role).readOwn('response') : ac.can(req.auth.role).readAny('response');
+
+		if (!permission.granted) {
+			throw new AppError(403, 'Forbidden');
+		}
+
+		res.status(200).json(response);
 	} catch (error) {
 		next(error);
 	}
