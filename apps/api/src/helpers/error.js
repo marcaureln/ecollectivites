@@ -18,7 +18,7 @@ exports.errorLogger = (err, req, res, next) => {
 
 exports.errorHandler = (err, req, res, next) => {
 	res.status(err.status || 500);
-	res.json({ error: err.status != 500 ? err.message : 'Internal server error' });
+	res.json({ error: err.status < 500 ? err.message : 'Internal server error' });
 };
 
 exports.AppError = AppError;
