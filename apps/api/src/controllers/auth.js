@@ -41,7 +41,7 @@ async function emailLogin(req, res, next) {
 
 		if (match) {
 			delete user.password;
-			user.token = jwt.sign({ userId }, JWT_SECRET, { expiresIn: JWT_VALIDITY });
+			user.token = jwt.sign({ userId: user.userId, role: user.role }, JWT_SECRET, { expiresIn: JWT_VALIDITY });
 			res.status(200).json(user);
 		} else {
 			throw new AppError(404, 'Incorrect email or password');
@@ -78,7 +78,7 @@ async function phoneLogin(req, res, next) {
 			throw new AppError(404, 'No user found');
 		} else {
 			delete user.password;
-			user.token = jwt.sign({ userId, firstname, lastname, phone }, JWT_SECRET, { expiresIn: JWT_VALIDITY });
+			user.token = jwt.sign({ userId: user.userId, role: user.role }, JWT_SECRET, { expiresIn: JWT_VALIDITY });
 			res.status(200).json(user);
 		}
 	} catch (error) {

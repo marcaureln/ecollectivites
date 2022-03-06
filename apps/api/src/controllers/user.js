@@ -1,16 +1,24 @@
 const bcrypt = require('bcrypt');
 const { PrismaClient, Role } = require('@prisma/client');
 const { AppError } = require('../helpers/error');
+const { ac, isSameCollectivite, belongsToCollectivite } = require('../helpers/accesscontrol');
 
 /** @type { PrismaClient } **/
 const prisma = require('../helpers/prisma').default;
 
 exports.getUser = async function (req, res, next) {
-	const userId = req.auth?.userId ?? req.params.id;
+	const userId = req.params.id;
 
 	try {
 		if (!userId) {
 			throw new AppError(400, 'Missing required fields');
+		}
+
+		const isOwn = userId === req.auth.userId || (await isSameCollectivite(userId, req.auth.userId));
+		const permission = isOwn ? ac.can(req.auth.role).readOwn('account') : ac.can(req.auth.role).readAny('account');
+
+		if (!permission.granted) {
+			throw new AppError(403, 'Forbidden');
 		}
 
 		const user = await prisma.user.findUnique({ where: { userId } });
@@ -19,8 +27,7 @@ exports.getUser = async function (req, res, next) {
 			throw new AppError(404, 'User not found');
 		}
 
-		delete user.password;
-		res.status(200).json(user);
+		res.status(200).json(permission.filter(user));
 	} catch (error) {
 		next(error);
 	}
@@ -32,6 +39,14 @@ exports.createUser = async function (req, res, next) {
 	try {
 		if (!firstname || !lastname || !email || !password || !role || !collectId) {
 			throw new AppError(400, 'Missing required fields');
+		}
+
+		const permission = (await belongsToCollectivite(req.auth.userId, collectId))
+			? ac.can(req.auth.role).createOwn('account')
+			: ac.can(req.auth.role).createAny('account');
+
+		if (!permission.granted) {
+			throw new AppError(403, 'Forbidden');
 		}
 
 		const hashedPassword = await bcrypt.hash(password, 10);
@@ -56,7 +71,7 @@ exports.createUser = async function (req, res, next) {
 };
 
 exports.updateUser = async function (req, res, next) {
-	const userId = req.auth?.userId ?? req.params.id;
+	const userId = req.params.id;
 	const { firstname, lastname, email, phone } = req.body;
 
 	try {
@@ -68,6 +83,13 @@ exports.updateUser = async function (req, res, next) {
 
 		if (!user) {
 			throw new AppError(404, 'User not found');
+		}
+
+		const isOwn = user.userId === req.auth.userId || isSameCollectivite(user, req.auth.userId);
+		const permission = isOwn ? ac.can(req.auth.role).readOwn('account') : ac.can(req.auth.role).readAny('account');
+
+		if (!permission.granted) {
+			throw new AppError(403, 'Forbidden');
 		}
 
 		const updatedUser = await prisma.user.update({
@@ -83,11 +105,18 @@ exports.updateUser = async function (req, res, next) {
 };
 
 exports.getUserRequests = async function (req, res, next) {
-	const userId = req.auth?.userId ?? req.params.id;
+	const userId = req.params.id;
 
 	try {
 		if (!userId) {
 			throw new AppError(400, 'Missing required fields');
+		}
+
+		const permission =
+			userId === req.auth.userId ? ac.can(req.auth.role).readOwn('request') : ac.can(req.auth.role).readAny('request');
+
+		if (!permission.granted) {
+			throw new AppError(403, 'Forbidden');
 		}
 
 		const user = await prisma.user.findUnique({ where: { userId } });
@@ -109,11 +138,20 @@ exports.getUserRequests = async function (req, res, next) {
 };
 
 exports.getUserResponses = async function (req, res, next) {
-	const userId = req.auth?.userId ?? req.params.id;
+	const userId = req.params.id;
 
 	try {
 		if (!userId) {
 			throw new AppError(400, 'Missing required fields');
+		}
+
+		const permission =
+			userId === req.auth.userId
+				? ac.can(req.auth.role).readOwn('response')
+				: ac.can(req.auth.role).readAny('response');
+
+		if (!permission.granted) {
+			throw new AppError(403, 'Forbidden');
 		}
 
 		const user = await prisma.user.findUnique({ where: { userId } });

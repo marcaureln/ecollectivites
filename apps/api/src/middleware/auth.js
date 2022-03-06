@@ -14,7 +14,7 @@ module.exports = function auth(req, res, next) {
 		if (!decodedToken.userId) {
 			res.status(401).send();
 		} else {
-			req.auth = { userId: decodedToken.userId };
+			req.auth = { userId: decodedToken.userId, role: decodedToken.role };
 			next();
 		}
 	} catch {
