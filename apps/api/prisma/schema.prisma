@@ -27,6 +27,7 @@ model Request {
   reqContent     String
   reqAttachments String?
   reqCreatedAt   DateTime      @default(now())
+  reqUpdatedAt   DateTime      @updatedAt
   reqClosedAt    DateTime?
   reqStatus      RequestStatus @relation(fields: [reqStatusId], references: [reqStatusId])
   reqStatusId    Int
@@ -34,7 +35,7 @@ model Request {
   reqTypeId      Int
   collect        Collectivite  @relation(fields: [collectId], references: [collectId])
   collectId      Int
-  User           User          @relation(fields: [userId], references: [userId])
+  user           User          @relation(fields: [userId], references: [userId])
   userId         String
   responses      Response[]
 }

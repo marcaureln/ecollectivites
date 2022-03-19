@@ -24,6 +24,7 @@ CREATE TABLE "Request" (
     "reqContent" TEXT NOT NULL,
     "reqAttachments" TEXT,
     "reqCreatedAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    "reqUpdatedAt" TIMESTAMP(3) NOT NULL,
     "reqClosedAt" TIMESTAMP(3),
     "reqStatusId" INTEGER NOT NULL,
     "reqTypeId" INTEGER NOT NULL,
