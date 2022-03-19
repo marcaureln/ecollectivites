@@ -71,7 +71,7 @@ model User {
   phone         String?      @unique @db.VarChar(10)
   email         String?      @unique @db.VarChar(80)
   password      String?      @db.VarChar(80)
-  passMaxAge    Int          @default(0)
+  passMaxAge    Int          @default(0) //The number of days after the user password must be changed.
   passChangedAt DateTime?
   collect       Collectivite @relation(fields: [collectId], references: [collectId])
   collectId     Int
