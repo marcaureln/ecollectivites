@@ -4,7 +4,7 @@
 	"description": "",
 	"main": "server.js",
 	"scripts": {
-		"load-fixtures": "npx prisma migrate reset --force && node src/fixtures/fixtures.js",
+		"seed": "npx prisma migrate reset --force && node src/seeders/seeder.js",
 		"dev": "nodemon server.js",
 		"start": "node server.js"
 	},

@@ -4,8 +4,8 @@ const { REQUEST_TYPES, REQUEST_STATUS } = require('./request-types-and-status');
 
 const prisma = new PrismaClient();
 
-async function loadFixtures() {
-	console.log('Loading fixtures...');
+async function seed() {
+	console.log('⏳ Start seeding...');
 
 	const communeType = await prisma.collectiviteType.create({ data: { collectTypeLabel: 'Commune' } });
 
@@ -28,9 +28,9 @@ async function loadFixtures() {
 	});
 }
 
-loadFixtures()
+seed()
 	.then((_) => {
-		console.log('✔ Fixtures loaded successfully!');
+		console.log('✔ Seeding completed!');
 	})
 	.catch((e) => {
 		throw e;
