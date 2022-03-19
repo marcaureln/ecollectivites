@@ -1,5 +1,5 @@
 const { PrismaClient } = require('@prisma/client');
-const { COMMUNES, REGIONS, REQUEST_TYPES, REQUEST_STATUS } = require('./seeds');
+const { COMMUNES, REGIONS, REQUEST_TYPES, REQUEST_STATUS } = require('./data');
 
 const prisma = new PrismaClient();
 
