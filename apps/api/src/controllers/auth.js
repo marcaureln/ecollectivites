@@ -40,6 +40,12 @@ async function emailLogin(req, res, next) {
 		const match = await bcrypt.compare(password, user.password);
 
 		if (match) {
+			const isPasswordExpired = user.passChangedAt.getTime() + user.passMaxAge * 86400000 < Date.now();
+
+			if (isPasswordExpired) {
+				throw new AppError(403, 'Password expired');
+			}
+
 			delete user.password;
 			user.token = jwt.sign({ userId: user.userId, role: user.role }, JWT_SECRET, { expiresIn: JWT_VALIDITY });
 			res.status(200).json(user);

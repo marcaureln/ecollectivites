@@ -1,5 +1,6 @@
 const { PrismaClient } = require('@prisma/client');
 const { COMMUNES, REGIONS, REQUEST_TYPES, REQUEST_STATUS } = require('./data');
+const bcrypt = require('bcrypt');
 
 const prisma = new PrismaClient();
 
@@ -24,6 +25,19 @@ async function seed() {
 
 	await prisma.requestStatus.createMany({
 		data: REQUEST_STATUS.map((requestStatus) => ({ reqStatusLabel: requestStatus })),
+	});
+
+	await prisma.user.create({
+		data: {
+			firstname: 'Optimus',
+			lastname: 'Prime',
+			role: 'ADMIN',
+			email: 'admin@e.co',
+			password: await bcrypt.hash('admin', 10),
+			passChangedAt: new Date(),
+			passMaxAge: 0,
+			collectId: 7,
+		},
 	});
 }
 
