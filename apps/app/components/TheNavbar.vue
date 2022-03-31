@@ -58,21 +58,6 @@ nav {
 }
 
 .make-request-btn {
-  background: $primary;
-  color: $on-primary;
-  border-radius: 3px;
-  transition: background ease 0.25s;
-  border: none;
-  margin: 0;
-  padding: 0.75rem 1rem;
-  text-align: center;
-  font-weight: bold;
-  font-size: 1rem;
-  cursor: pointer;
-
-  &:hover,
-  &:focus {
-    background: $primary-variant;
-  }
+  @include button;
 }
 </style>

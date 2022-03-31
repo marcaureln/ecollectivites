@@ -51,6 +51,7 @@ export default {
   googleFonts: {
     families: {
       Roboto: [300, 400, 700],
+      "Barlow+Condensed": [700],
     },
     prefetch: true,
     preconnect: true,
@@ -59,7 +60,7 @@ export default {
   },
 
   styleResources: {
-    scss: "./assets/css/variables.scss",
+    scss: ["./assets/css/variables.scss", "./assets/css/mixins.scss"],
   },
 
   // Build Configuration: https://go.nuxtjs.dev/config-build

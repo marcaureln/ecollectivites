@@ -1,4 +1,9 @@
-<template></template>
+<template>
+  <div>
+    <HomeIntro />
+    <HomeHero />
+  </div>
+</template>
 
 <script>
 export default {
