@@ -45,7 +45,7 @@ export default {};
   background: $primary-variant;
   color: $on-primary;
   margin: 0;
-  padding: 4rem 0;
+  padding: 4rem 0 6rem 0;
 }
 
 .content {

@@ -38,7 +38,7 @@ footer {
   color: white;
   background-color: black;
   margin: 0;
-  padding: 6rem 0;
+  padding: 9rem 0;
 }
 
 .wrapper {
@@ -50,7 +50,7 @@ footer {
 
 .footer-logo {
   .logo {
-    height: 128px;
+    height: 92px;
     filter: invert(1);
   }
 }
