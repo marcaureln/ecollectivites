@@ -1,5 +1,9 @@
 <template>
   <div>
+    <header>
+      <TinyTopNav />
+      <TheNavbar />
+    </header>
     <Nuxt />
   </div>
 </template>

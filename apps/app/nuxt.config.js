@@ -36,12 +36,30 @@ export default {
   modules: [
     // https://go.nuxtjs.dev/axios
     "@nuxtjs/axios",
+    // https://google-fonts.nuxtjs.org/
+    "@nuxtjs/google-fonts",
+    // https://github.com/nuxt-community/style-resources-module
+    "@nuxtjs/style-resources",
   ],
 
   // Axios module configuration: https://go.nuxtjs.dev/config-axios
   axios: {
     // Workaround to avoid enforcing hard-coded localhost:3000: https://github.com/nuxt-community/axios-module/issues/308
     baseURL: "/",
+  },
+
+  googleFonts: {
+    families: {
+      Roboto: [300, 400, 700],
+    },
+    prefetch: true,
+    preconnect: true,
+    download: true,
+    display: "swap",
+  },
+
+  styleResources: {
+    scss: "./assets/css/variables.scss",
   },
 
   // Build Configuration: https://go.nuxtjs.dev/config-build
