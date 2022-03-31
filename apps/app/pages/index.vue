@@ -4,6 +4,7 @@
     <HomeHero />
     <HomeHowItWorks />
     <HomeAbout />
+    <TheFooter />
   </div>
 </template>
 
