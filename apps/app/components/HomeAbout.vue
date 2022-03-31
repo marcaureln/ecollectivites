@@ -45,5 +45,6 @@ p {
 
 button {
   @include button($secondary, $on-secondary, $secondary-variant);
+  font-size: 1.25rem;
 }
 </style>
