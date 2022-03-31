@@ -2,6 +2,7 @@
   <div>
     <HomeIntro />
     <HomeHero />
+    <HomeHowItWorks />
   </div>
 </template>
 
