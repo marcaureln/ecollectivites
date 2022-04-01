@@ -16,3 +16,19 @@
         background: $variant;
     }
 }
+
+@mixin button-inverted {
+    background: $background;
+    color: $on-background;
+    border: 1px solid $primary;
+    transition: background ease 0.25s, color ease 0.25s;
+
+    &:hover {
+        background: $primary;
+        color: $on-primary;
+    }
+
+    &:focus {
+        border-color: $primary-variant;
+    }
+}

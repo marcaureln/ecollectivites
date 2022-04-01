@@ -17,14 +17,40 @@
     </div>
 
     <div class="nav-end">
-      <nuxt-link to="" class="nav-link">Mon compte</nuxt-link>
+      <button v-if="!isLoggedIn" class="nav-link" @click="openLoginModal()">
+        Se connecter
+      </button>
+      <button v-else class="nav-link">Mon compte</button>
+      <LoginModal
+        :isActive="isLoginModalActive"
+        @close="closeLoginModal()"
+      ></LoginModal>
       <button class="make-request-btn">Faire une requête</button>
     </div>
   </nav>
 </template>
 
 <script>
-export default {};
+import { mapState } from "vuex";
+
+export default {
+  data() {
+    return {
+      isLoginModalActive: false,
+    };
+  },
+  computed: {
+    ...mapState(["isLoggedIn"]),
+  },
+  methods: {
+    openLoginModal() {
+      this.isLoginModalActive = true;
+    },
+    closeLoginModal() {
+      this.isLoginModalActive = false;
+    },
+  },
+};
 </script>
 
 <style lang="scss" scoped>
