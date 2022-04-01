@@ -14,20 +14,7 @@ export const state = () => ({
 export const getters = {};
 
 export const mutations = {
-  login(
-    state,
-    {
-      method,
-      userId,
-      firstname,
-      lastname,
-      role,
-      phone,
-      email,
-      collectId,
-      token,
-    }
-  ) {
+  login(state, { method, userId, firstname, lastname, role, phone, email, collectId, token }) {
     state.isLoggedIn = true;
     state.userId = userId;
     state.firstname = firstname;
@@ -42,15 +29,24 @@ export const mutations = {
 };
 
 export const actions = {
-  async login({ commit }, { method, phone, email, password }) {
+  async login({ commit }, { method, phone, verifyToken, email, password }) {
     if (method === "phone") {
-      const user = await this.$axios.$post("/auth/login", {
-        method,
-        phone,
-      });
-
-      commit("login", { ...user, method: "phone" });
-      return true;
+      try {
+        const user = await this.$axios.$post(
+          "/auth/login",
+          {
+            method,
+            phone,
+          },
+          {
+            headers: { Authorization: `Bearer ${verifyToken}` },
+          }
+        );
+        commit("login", { ...user, method: "phone" });
+        return true;
+      } catch (error) {
+        return false;
+      }
     } else if (method === "email") {
       try {
         const user = await this.$axios.$post("/auth/login", {
@@ -64,6 +60,24 @@ export const actions = {
         return false;
       }
     } else {
+      return false;
+    }
+  },
+  async sendVerificationCode(context, { phone }) {
+    try {
+      const response = await this.$axios.$post("/auth/verify/verification", { phone });
+
+      return response.message;
+    } catch (error) {
+      return false;
+    }
+  },
+  async checkVerificationCode(context, { phone, code }) {
+    try {
+      const response = await this.$axios.$post("/auth/verify/verification-check", { phone, code });
+
+      return response.token;
+    } catch (error) {
       return false;
     }
   },

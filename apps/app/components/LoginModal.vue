@@ -1,29 +1,46 @@
 <template>
-  <BaseModal
-    :isActive="isActive"
-    width="350px"
-    @close="close()"
-    class="wrapper"
-  >
+  <BaseModal :isActive="isActive" width="350px" @close="closeModal()" class="wrapper">
     <span class="close-btn" @click="closeModal()"> &times; </span>
     <h1>Se connecter</h1>
-    <div>
-      <label for="email">Email<span class="required">*</span></label>
+    <div v-if="method === 'email'" class="email-login-form">
       <div>
-        <input type="email" id="email" v-model="email" required />
+        <label for="email">Email :</label>
+        <div>
+          <input type="email" id="email" v-model="email" required />
+        </div>
       </div>
-    </div>
-    <div>
-      <label for="password">Mot de passe<span class="required">*</span></label>
       <div>
-        <input type="password" id="password" v-model="password" required />
+        <label for="password">Mot de passe :</label>
+        <div>
+          <input type="password" id="password" v-model="password" required />
+        </div>
       </div>
+      <button class="login-btn" @click="loginWithEmail()">Se connecter</button>
+      <button class="phone-login-btn" @click="changeMethod('phone')">Se connecter avec son téléphone</button>
     </div>
-    <button class="login-btn" @click="loginWithEmail()">Se connecter</button>
-    <button class="phone-login-btn">Se connecter avec son téléphone</button>
-    <div class="register-link">
-      <a><span class="bold">Pas de compte ?</span> S'inscrire</a>
+    <div v-else class="phone-login-form">
+      <div>
+        <label for="phone">Numéro de téléphone :</label>
+        <div>
+          <input type="tel" id="phone" v-model="phone" required />
+        </div>
+      </div>
+      <p v-if="!isCodeSended">
+        <a @click="alreadyHaveCode()">J'ai déjà un code</a>
+      </p>
+      <div v-if="isCodeSended">
+        <label for="code">Code de vérification :</label>
+        <div>
+          <input id="code" v-model="code" required />
+        </div>
+        <p>Pas reçu de code ? <a @click="reSendCode()">Renvoyer</a></p>
+      </div>
+      <button class="login-btn" @click="loginWithPhone()">
+        {{ isCodeSended ? "Vérifier et se connecter" : "Continuer" }}
+      </button>
+      <button class="phone-login-btn" @click="changeMethod('email')">Se connecter avec son email</button>
     </div>
+    <p class="register">Pas de compte ? <a>S'inscrire</a></p>
   </BaseModal>
 </template>
 
@@ -39,14 +56,16 @@ export default {
   },
   data() {
     return {
+      method: "email",
       email: "",
       password: "",
+      phone: "",
+      code: "",
+      isCodeSended: false,
     };
   },
   methods: {
-    ...mapActions([
-      "login", //also supports payload `this.nameOfAction(amount)`
-    ]),
+    ...mapActions(["login", "sendVerificationCode", "checkVerificationCode"]),
     async loginWithEmail() {
       const response = await this.login({
         method: "email",
@@ -57,6 +76,36 @@ export default {
       if (response === true) {
         this.closeModal();
       }
+    },
+    async loginWithPhone() {
+      if (this.isCodeSended) {
+        const verifyToken = await this.checkVerificationCode({
+          phone: this.phone,
+          code: this.code,
+        });
+        const loginResponse = await this.login({
+          method: "phone",
+          phone: this.phone,
+          code: this.code,
+          verifyToken,
+        });
+
+        if (loginResponse === true) {
+          this.closeModal();
+        }
+      } else {
+        this.sendVerificationCode({ phone: this.phone });
+        this.isCodeSended = true;
+      }
+    },
+    reSendCode() {
+      this.isCodeSended = false;
+    },
+    alreadyHaveCode() {
+      this.isCodeSended = true;
+    },
+    changeMethod(method) {
+      this.method = method;
     },
     closeModal() {
       this.$emit("close");
@@ -76,10 +125,6 @@ export default {
   float: right;
 }
 
-.required {
-  color: #d72323;
-}
-
 h1 {
   margin: 1rem 0;
 }
@@ -96,13 +141,19 @@ input {
   font-size: 1rem;
 }
 
+a {
+  font-weight: bold;
+}
+
+p {
+  margin: 0;
+  font-size: 1rem;
+}
+
 .login-btn {
   @include button;
   width: 100%;
-
-  &:disabled {
-    cursor: not-allowed;
-  }
+  margin-top: 1rem;
 }
 
 .phone-login-btn {
@@ -112,17 +163,9 @@ input {
   margin-top: 1rem;
 }
 
-.register-link {
+.register {
   margin-top: 2rem;
   font-size: 1rem;
   text-align: center;
-}
-
-.login-error {
-  color: $error;
-}
-
-.bold {
-  font-weight: bold;
 }
 </style>

@@ -23,5 +23,8 @@
     "@nuxtjs/style-resources": "^1.2.1",
     "sass": "^1.49.9",
     "sass-loader": "^10.2.1"
+  },
+  "prettier": {
+    "printWidth": 120
   }
 }
