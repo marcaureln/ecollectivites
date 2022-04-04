@@ -5,6 +5,7 @@
       <TheNavbar />
     </header>
     <Nuxt />
+    <TheFooter />
   </div>
 </template>
 
