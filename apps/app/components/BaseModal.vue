@@ -67,6 +67,6 @@ export default {
   background-color: #fefefe;
   margin: 10% auto;
   padding: 20px;
-  border-radius: 9px;
+  border-radius: 3px;
 }
 </style>
