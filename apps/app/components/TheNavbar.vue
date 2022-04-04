@@ -14,7 +14,7 @@
 
     <div class="nav-end">
       <button v-if="!isLoggedIn" class="login-btn" @click="openLoginModal()">Se connecter</button>
-      <button v-else class="my-account-btn">Mon compte</button>
+      <MyAccountButton v-else />
       <LoginModal :isActive="isLoginModalActive" @close="closeLoginModal()"></LoginModal>
       <button class="make-request-btn">Faire une requête</button>
     </div>
@@ -77,15 +77,10 @@ nav {
 .login-btn {
   @include button;
   @include button-inverted;
-  margin-right: 1rem;
-}
-
-.my-account-btn {
-  @include button($secondary, $on-secondary, $secondary-variant);
-  margin-right: 1rem;
 }
 
 .make-request-btn {
   @include button;
+  margin-left: 1rem;
 }
 </style>
