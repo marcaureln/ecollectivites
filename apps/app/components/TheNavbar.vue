@@ -7,7 +7,7 @@
     </div>
 
     <div class="nav-center">
-      <nuxt-link to="" class="nav-link">Accueil</nuxt-link>
+      <nuxt-link to="/" class="nav-link">Accueil</nuxt-link>
       <nuxt-link to="" class="nav-link">À propos</nuxt-link>
       <nuxt-link to="" class="nav-link">Nous contacter</nuxt-link>
     </div>
