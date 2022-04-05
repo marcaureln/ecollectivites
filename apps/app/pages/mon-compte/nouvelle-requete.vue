@@ -65,6 +65,11 @@
 
 <script>
 export default {
+  head() {
+    return {
+      title: "Faire une Requête — eCollectivités",
+    };
+  },
   async asyncData({ $axios }) {
     const requestTypes = await $axios.$get("/requests/types");
     const collectTypes = await $axios.$get("/collectivites/types");
