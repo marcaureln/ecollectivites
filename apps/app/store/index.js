@@ -66,7 +66,7 @@ export const actions = {
   async fetchUser({ commit }, { token }) {
     try {
       const headers = { Authorization: `Bearer ${token}` };
-      const user = await axios.$get("/me", { headers });
+      const user = await this.$axios.$get("/me", { headers });
       commit("saveUser", user);
       return user;
     } catch (e) {
