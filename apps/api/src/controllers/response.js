@@ -11,7 +11,7 @@ exports.makeResponse = async function (req, res, next) {
 
 	try {
 		if (!resContent || !reqId) {
-			throw AppError(400, 'Missing required fields');
+			throw new AppError(400, 'Missing required fields');
 		}
 
 		const resAttachments = req.files.reduce((prev, current) => (prev += `static/uploads/${current.filename};`), '');
