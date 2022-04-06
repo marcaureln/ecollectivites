@@ -3,12 +3,18 @@
     <nuxt-link to="">Mes requêtes</nuxt-link>
     <nuxt-link to="/mon-compte/nouvelle-requete">Faire une requête</nuxt-link>
     <nuxt-link to="">Modifier mes informations</nuxt-link>
-    <button class="logout-btn">Se déconnecter</button>
+    <button class="logout-btn" @click="logout()">Se déconnecter</button>
   </BaseDropdown>
 </template>
 
 <script>
-export default {};
+import { mapActions } from "vuex";
+
+export default {
+  methods: {
+    ...mapActions(["logout"]),
+  },
+};
 </script>
 
 <style lang="scss">

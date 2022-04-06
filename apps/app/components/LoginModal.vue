@@ -65,7 +65,7 @@ export default {
     };
   },
   methods: {
-    ...mapActions(["login", "sendVerificationCode", "checkVerificationCode"]),
+    ...mapActions(["login"]),
     async loginWithEmail() {
       const response = await this.login({
         method: "email",
@@ -75,14 +75,12 @@ export default {
 
       if (response === true) {
         this.closeModal();
+        window.location.reload();
       }
     },
     async loginWithPhone() {
       if (this.isCodeSended) {
-        const verifyToken = await this.checkVerificationCode({
-          phone: this.phone,
-          code: this.code,
-        });
+        const verifyToken = (await this.checkVerificationCode({ phone: this.phone, code: this.code })).token;
         const loginResponse = await this.login({
           method: "phone",
           phone: this.phone,
@@ -92,11 +90,20 @@ export default {
 
         if (loginResponse === true) {
           this.closeModal();
+          window.location.reload();
         }
       } else {
         this.sendVerificationCode({ phone: this.phone });
         this.isCodeSended = true;
       }
+    },
+    async sendVerificationCode({ phone }) {
+      // Response: { message }
+      return await this.$axios.$post("/auth/verify/verification", { phone });
+    },
+    async checkVerificationCode({ phone, code }) {
+      // Response: { phone, token }
+      return await this.$axios.$post("/auth/verify/verification-check", { phone, code });
     },
     reSendCode() {
       this.isCodeSended = false;

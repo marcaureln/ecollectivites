@@ -22,7 +22,7 @@
 </template>
 
 <script>
-import { mapState } from "vuex";
+import { mapGetters } from "vuex";
 
 export default {
   data() {
@@ -30,8 +30,11 @@ export default {
       isLoginModalActive: false,
     };
   },
+  mounted() {
+    this.$forceUpdate();
+  },
   computed: {
-    ...mapState(["isLoggedIn"]),
+    ...mapGetters(["isLoggedIn"]),
   },
   methods: {
     openLoginModal() {
