@@ -58,13 +58,13 @@
         <input type="file" name="attachements" id="attachements" multiple @change="handleFileUpload" />
       </div>
       <!-- Submit -->
-      <input type="submit" @click.prevent="sendRequest()" value="Envoyer" />
+      <input type="submit" @click.prevent="submitRequest()" value="Envoyer" />
     </form>
   </section>
 </template>
 
 <script>
-import { mapState } from "vuex";
+import { mapState, mapGetters } from "vuex";
 
 export default {
   middleware: ["auth"],
@@ -94,6 +94,7 @@ export default {
   },
   computed: {
     ...mapState({ userCollectId: "collectId", userId: "userId" }),
+    ...mapGetters(["token"]),
     filteredCollects() {
       return this.collects.filter((collect) => collect.collectTypeId == this.collectTypeId);
     },
@@ -111,7 +112,32 @@ export default {
       if (!files.length) return;
       this.attachements = files;
     },
-    sendRequest() {},
+    async submitRequest() {
+      let formData = new FormData();
+      const data = {
+        reqType: this.reqType,
+        reqContent: this.reqContent,
+        collectId: this.collectId,
+        userId: this.userId,
+      };
+
+      formData.append("data", JSON.stringify(data));
+
+      for (const file of this.attachements) {
+        formData.append(`attachements`, file);
+      }
+
+      try {
+        const headers = {
+          "Content-Type": "multipart/form-data",
+          Authorization: `Bearer ${this.token}`,
+        };
+        const response = await this.$axios.$post("/requests", formData, { headers });
+        console.log(response);
+      } catch (error) {
+        console.log(error);
+      }
+    },
   },
 };
 </script>
