@@ -64,6 +64,8 @@
 </template>
 
 <script>
+import { mapState } from "vuex";
+
 export default {
   middleware: ["auth"],
   head() {
@@ -71,26 +73,33 @@ export default {
       title: "Faire une Requête — eCollectivités",
     };
   },
-  async asyncData({ $axios }) {
+  async asyncData({ $axios, store }) {
     const requestTypes = await $axios.$get("/requests/types");
     const collectTypes = await $axios.$get("/collectivites/types");
     const collects = await $axios.$get("/collectivites");
+    let userCollect = { collectTypeId: "", collectId: "" };
+
+    if (store.state.collectId) {
+      userCollect = await $axios.$get(`/collectivites/${store.state.collectId}`);
+    }
 
     return {
+      collectTypeId: userCollect.collectTypeId,
+      collectId: userCollect.collectId,
       requestTypes,
       collectTypes,
       collects,
+      userCollect,
     };
   },
   computed: {
+    ...mapState({ userCollectId: "collectId", userId: "userId" }),
     filteredCollects() {
       return this.collects.filter((collect) => collect.collectTypeId == this.collectTypeId);
     },
   },
   data() {
     return {
-      collectTypeId: "",
-      collectId: "",
       reqType: "",
       reqContent: "",
       attachements: [],
