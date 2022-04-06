@@ -1,8 +1,8 @@
 <template>
   <BaseDropdown :label="'Mon Compte'" :classList="['my-account-btn']" id="my-account-dropdown">
-    <nuxt-link to="">Mes requêtes</nuxt-link>
+    <nuxt-link to="/mon-compte/mes-requetes">Mes requêtes</nuxt-link>
     <nuxt-link to="/mon-compte/nouvelle-requete">Faire une requête</nuxt-link>
-    <nuxt-link to="">Modifier mes informations</nuxt-link>
+    <nuxt-link to="/mon-compte">Modifier mes informations</nuxt-link>
     <button class="logout-btn" @click="logout()">Se déconnecter</button>
   </BaseDropdown>
 </template>
