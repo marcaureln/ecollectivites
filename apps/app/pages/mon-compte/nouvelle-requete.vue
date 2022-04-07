@@ -18,7 +18,7 @@
         <!-- Select collectivite -->
         <div class="form-group">
           <label for="collect">Collectivité <em>*</em></label>
-          <select id="collect-type" class="form-control" v-model="collectId" :disabled="!collectTypeId" required>
+          <select id="collect" class="form-control" v-model="collectId" :disabled="!collectTypeId" required>
             <option value="">--Choisir une collectivité--</option>
             <option v-for="collect in filteredCollects" :key="collect.collectId" :value="collect.collectId">
               {{ collect.collectName }}
