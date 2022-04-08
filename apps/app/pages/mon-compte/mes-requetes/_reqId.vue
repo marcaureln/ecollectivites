@@ -33,7 +33,7 @@
       <div v-if="reqAttachments.length > 0">
         <ul>
           <li v-for="(file, index) in reqAttachments" :key="index">
-            <nuxt-link :to="'/'">{{ extractFilename(file) }}</nuxt-link>
+            <a :href="cdnUrl + '/' + file">{{ extractFilename(file) }}</a>
           </li>
         </ul>
       </div>
@@ -97,6 +97,7 @@ export default {
     return {
       resContent: "",
       resAttachments: [],
+      cdnUrl: this.$config.cdnUrl,
     };
   },
   computed: {
