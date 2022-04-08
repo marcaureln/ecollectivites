@@ -2,7 +2,7 @@
   <section class="intro">
     <h1>Vous rapprochez de votre collectivité</h1>
     <h2>Inscrivez-vous dès maintenant et effectuez votre première requête !</h2>
-    <button>S'inscrire</button>
+    <nuxt-link to="/inscription" class="register-btn">S'inscrire</nuxt-link>
   </section>
 </template>
 
@@ -38,7 +38,7 @@ h2 {
   margin-bottom: 2rem;
 }
 
-button {
+.register-btn {
   @include button($secondary, $on-secondary, $secondary-variant);
   width: fit-content;
   font-size: 1.25rem;

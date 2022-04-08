@@ -13,9 +13,8 @@
     </div>
 
     <div class="nav-end">
-      <button v-if="!isLoggedIn" class="login-btn" @click="openLoginModal()">Se connecter</button>
+      <nuxt-link v-if="!isLoggedIn" class="login-btn" to="/connexion">Se connecter</nuxt-link>
       <MyAccountButton v-else />
-      <LoginModal :isActive="isLoginModalActive" @close="closeLoginModal()"></LoginModal>
       <nuxt-link to="/mon-compte/nouvelle-requete" class="make-request-btn">Faire une requête</nuxt-link>
     </div>
   </nav>
