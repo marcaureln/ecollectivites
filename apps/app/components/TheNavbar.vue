@@ -10,8 +10,8 @@
 
       <div class="nav-center">
         <nuxt-link to="/" class="nav-link">Accueil</nuxt-link>
-        <nuxt-link to="" class="nav-link">À propos</nuxt-link>
-        <nuxt-link to="" class="nav-link">Nous contacter</nuxt-link>
+        <nuxt-link to="/a-propos" class="nav-link">À propos</nuxt-link>
+        <nuxt-link to="/nous-contacter" class="nav-link">Nous contacter</nuxt-link>
       </div>
 
       <div class="nav-end">

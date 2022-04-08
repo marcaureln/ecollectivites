@@ -3,26 +3,18 @@
     <div class="wrapper">
       <div class="footer-logo">
         <nuxt-link to="/">
-          <img
-            src="@/assets/img/logo-large.png"
-            alt="Logo eCollectivités"
-            class="logo"
-          />
+          <img src="@/assets/img/logo-large.png" alt="Logo eCollectivités" class="logo" />
         </nuxt-link>
       </div>
       <div class="footer-links">
-        <nuxt-link to="" class="nav-link">Accueil</nuxt-link>
-        <nuxt-link to="" class="nav-link">À propos</nuxt-link>
-        <nuxt-link to="" class="nav-link">Nous contacter</nuxt-link>
+        <nuxt-link to="/" class="nav-link">Accueil</nuxt-link>
+        <nuxt-link to="/a-propos" class="nav-link">À propos</nuxt-link>
+        <nuxt-link to="/nous-contacter" class="nav-link">Nous contacter</nuxt-link>
       </div>
       <div class="footer-legal">
         <div>&#169; eCollectivités. 2022 Tous droits réservés.</div>
-        <nuxt-link to="/privacy-policy" class="nav-link">
-          Politique de confidentialité.
-        </nuxt-link>
-        <nuxt-link to="/terms-of-use" class="nav-link">
-          Conditions d'utilisation.
-        </nuxt-link>
+        <nuxt-link to="/protection-donnees" class="nav-link"> Politique de confidentialité. </nuxt-link>
+        <nuxt-link to="/cgu" class="nav-link"> Conditions d'utilisation. </nuxt-link>
       </div>
     </div>
   </footer>
