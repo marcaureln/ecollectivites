@@ -1,9 +1,6 @@
 <template>
   <div>
-    <header>
-      <TinyTopNav />
-      <TheNavbar />
-    </header>
+    <TheNavbar />
     <Nuxt />
     <TheFooter />
   </div>

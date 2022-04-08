@@ -1,23 +1,26 @@
 <template>
-  <nav>
-    <div class="nav-start">
-      <nuxt-link to="/">
-        <img src="@/assets/img/logo-large.png" alt="Logo eCollectivités" class="logo" />
-      </nuxt-link>
-    </div>
+  <header>
+    <TinyTopNav v-if="!isLoggedIn" />
+    <nav>
+      <div class="nav-start">
+        <nuxt-link to="/">
+          <img src="@/assets/img/logo-large.png" alt="Logo eCollectivités" class="logo" />
+        </nuxt-link>
+      </div>
 
-    <div class="nav-center">
-      <nuxt-link to="/" class="nav-link">Accueil</nuxt-link>
-      <nuxt-link to="" class="nav-link">À propos</nuxt-link>
-      <nuxt-link to="" class="nav-link">Nous contacter</nuxt-link>
-    </div>
+      <div class="nav-center">
+        <nuxt-link to="/" class="nav-link">Accueil</nuxt-link>
+        <nuxt-link to="" class="nav-link">À propos</nuxt-link>
+        <nuxt-link to="" class="nav-link">Nous contacter</nuxt-link>
+      </div>
 
-    <div class="nav-end">
-      <nuxt-link v-if="!isLoggedIn" class="login-btn" to="/connexion">Se connecter</nuxt-link>
-      <MyAccountButton v-else />
-      <nuxt-link to="/mon-compte/nouvelle-requete" class="make-request-btn">Faire une requête</nuxt-link>
-    </div>
-  </nav>
+      <div class="nav-end">
+        <nuxt-link v-if="!isLoggedIn" class="login-btn" to="/connexion">Se connecter</nuxt-link>
+        <MyAccountButton v-else />
+        <nuxt-link to="/mon-compte/nouvelle-requete" class="make-request-btn">Faire une requête</nuxt-link>
+      </div>
+    </nav>
+  </header>
 </template>
 
 <script>

@@ -1,13 +1,21 @@
 <template>
   <section class="intro">
     <h1>Vous rapprochez de votre collectivité</h1>
-    <h2>Inscrivez-vous dès maintenant et effectuez votre première requête !</h2>
-    <nuxt-link to="/inscription" class="register-btn">S'inscrire</nuxt-link>
+    <h2 v-if="!isLoggedIn">Inscrivez-vous dès maintenant et effectuez votre première requête !</h2>
+    <h2 v-else>Consulter pour voir l'avancement de vos requêtes</h2>
+    <nuxt-link v-if="!isLoggedIn" to="/inscription" class="register">S'inscrire</nuxt-link>
+    <nuxt-link v-else to="/mon-compte/mes-requetes" class="register">Consulter</nuxt-link>
   </section>
 </template>
 
 <script>
-export default {};
+import { mapGetters } from "vuex";
+
+export default {
+  computed: {
+    ...mapGetters(["isLoggedIn"]),
+  },
+};
 </script>
 
 <style lang="scss" scoped>
@@ -38,9 +46,8 @@ h2 {
   margin-bottom: 2rem;
 }
 
-.register-btn {
+.register {
   @include button($secondary, $on-secondary, $secondary-variant);
-  width: fit-content;
-  font-size: 1.25rem;
+  font-size: 1.2rem;
 }
 </style>
