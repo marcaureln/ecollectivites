@@ -1,10 +1,10 @@
 export default function ({ store, redirect, error, route }) {
   if (!store.getters.isLoggedIn) {
-    // redirect("/auth");
-    error({
-      statusCode: 401,
-      message: "Seuls les membres peuvent accéder à cette page",
-    });
+    redirect("/connexion");
+    // error({
+    //   statusCode: 401,
+    //   message: "Seuls les membres peuvent accéder à cette page",
+    // });
   } else {
     if (
       !store.state.userId ||
