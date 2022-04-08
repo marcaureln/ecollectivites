@@ -2,15 +2,13 @@
   <section>
     <h1>Qui sommes-nous ?</h1>
     <p>
-      Lorem ipsum dolor sit, amet consectetur adipisicing elit. Assumenda quis,
-      animi dignissimos autem perferendis obcaecati, inventore qui omnis tempore
-      error, quia rerum quod consequuntur ut fuga cupiditate natus suscipit
-      doloremque. Lorem ipsum dolor sit amet consectetur adipisicing elit.
-      Quisquam temporibus illo voluptate ea vitae architecto porro provident!
-      Explicabo ipsam, quaerat illo ducimus cum quasi laboriosam corporis
-      doloremque exercitationem error possimus.
+      Lorem ipsum dolor sit, amet consectetur adipisicing elit. Assumenda quis, animi dignissimos autem perferendis
+      obcaecati, inventore qui omnis tempore error, quia rerum quod consequuntur ut fuga cupiditate natus suscipit
+      doloremque. Lorem ipsum dolor sit amet consectetur adipisicing elit. Quisquam temporibus illo voluptate ea vitae
+      architecto porro provident! Explicabo ipsam, quaerat illo ducimus cum quasi laboriosam corporis doloremque
+      exercitationem error possimus.
     </p>
-    <button>En savoir plus</button>
+    <nuxt-link to="/a-propos" class="button">En savoir plus</nuxt-link>
   </section>
 </template>
 
@@ -43,8 +41,8 @@ p {
   margin-bottom: 2rem;
 }
 
-button {
+.button {
   @include button($secondary, $on-secondary, $secondary-variant);
-  font-size: 1.25rem;
+  font-size: 1.2rem;
 }
 </style>
