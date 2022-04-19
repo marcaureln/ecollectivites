@@ -14,7 +14,6 @@
         </div>
         <button type="submit" class="next-btn">Continuer</button>
         <button class="phone-login-btn" @click="changeMethod('phone')">Utiliser son téléphone</button>
-        <nuxt-link to="/connexion" class="login">Déjà un compte ? Se connecter</nuxt-link>
       </form>
 
       <!-- Phone sign up form -->
@@ -29,24 +28,20 @@
         </div>
         <button type="submit" class="login-btn">Continuer</button>
         <button class="phone-login-btn" @click="changeMethod('email')">Utiliser son email</button>
-        <nuxt-link to="/connexion" class="login">Déjà un compte ? Se connecter</nuxt-link>
       </form>
-    </div>
 
+      <nuxt-link to="/connexion" class="login">Déjà un compte ? Se connecter</nuxt-link>
+    </div>
     <div v-else>
       <!-- Personal information -->
       <form @submit.prevent="register()">
         <div class="form-group">
           <label for="lastname">Nom :</label>
-          <div>
-            <input type="lastname" id="lastname" v-model="lastname" required />
-          </div>
+          <input type="lastname" id="lastname" v-model="lastname" required />
         </div>
         <div class="form-group">
           <label for="firstname">Prénoms :</label>
-          <div>
-            <input type="firstname" id="firstname" v-model="firstname" required />
-          </div>
+          <input type="firstname" id="firstname" v-model="firstname" required />
         </div>
         <div class="form-group">
           <label for="collect">Collectivité</label>
@@ -57,7 +52,7 @@
             </option>
           </select>
         </div>
-        <input type="submit" class="login-btn" value="S'inscrire" />
+        <button type="submit" class="login-btn">S'inscrire</button>
       </form>
     </div>
   </section>
@@ -65,6 +60,7 @@
 
 <script>
 export default {
+  layout: "auth-layout",
   middleware({ store, redirect }) {
     if (store.getters.isLoggedIn) {
       redirect("/");

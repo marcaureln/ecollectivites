@@ -1,44 +1,38 @@
 <template>
   <section class="wrapper">
     <h1>Se connecter</h1>
-    <div v-if="method === 'email'" class="email-login-form">
+    <form v-if="method === 'email'" class="email-login-form" @submit.prevent="loginWithEmail()">
       <div>
         <label for="email">Email :</label>
-        <div>
-          <input type="email" id="email" v-model="email" required />
-        </div>
+        <input type="email" id="email" v-model="email" required />
       </div>
       <div>
         <label for="password">Mot de passe :</label>
-        <div>
-          <input type="password" id="password" v-model="password" required />
-        </div>
+        <input type="password" id="password" v-model="password" required />
       </div>
-      <button class="login-btn" @click="loginWithEmail()">Se connecter</button>
-      <button class="phone-login-btn" @click="changeMethod('phone')">Se connecter avec son téléphone</button>
-    </div>
-    <div v-else class="phone-login-form">
+      <button type="submit" class="login-btn">Se connecter</button>
+      <button type="button" class="phone-login-btn" @click="changeMethod('phone')">
+        Se connecter avec son téléphone
+      </button>
+    </form>
+    <form v-else class="phone-login-form" @submit.prevent="loginWithPhone()">
       <div>
         <label for="phone">Numéro de téléphone :</label>
-        <div>
-          <input type="tel" id="phone" v-model="phone" required />
-        </div>
+        <input type="tel" id="phone" v-model="phone" :disabled="isCodeSended" required />
       </div>
       <p v-if="!isCodeSended">
         <a @click="alreadyHaveCode()">J'ai déjà un code</a>
       </p>
       <div v-if="isCodeSended">
-        <label for="code">Code de vérification :</label>
         <div>
+          <label for="code">Code de vérification :</label>
           <input id="code" v-model="code" required />
         </div>
         <p>Pas reçu de code ? <a @click="reSendCode()">Renvoyer</a></p>
       </div>
-      <button class="login-btn" @click="loginWithPhone()">
-        {{ isCodeSended ? "Vérifier et se connecter" : "Continuer" }}
-      </button>
-      <button class="phone-login-btn" @click="changeMethod('email')">Se connecter avec son email</button>
-    </div>
+      <button type="submit" class="login-btn">{{ isCodeSended ? "Vérifier et se connecter" : "Continuer" }}</button>
+      <button type="button" class="phone-login-btn" @click="changeMethod('email')">Se connecter avec son email</button>
+    </form>
     <nuxt-link to="/inscription" class="register">Pas de compte ? S'inscrire</nuxt-link>
   </section>
 </template>
@@ -47,6 +41,7 @@
 import { mapActions } from "vuex";
 
 export default {
+  layout: "auth-layout",
   middleware({ store, redirect }) {
     if (store.getters.isLoggedIn) {
       redirect("/");
@@ -77,7 +72,7 @@ export default {
       });
 
       if (response === true) {
-        window.location.reload();
+        this.$router.push("/");
       }
     },
     async loginWithPhone() {
@@ -91,7 +86,7 @@ export default {
         });
 
         if (loginResponse === true) {
-          window.location.reload();
+          this.$router.push("/");
         }
       } else {
         this.sendVerificationCode({ phone: this.phone });
