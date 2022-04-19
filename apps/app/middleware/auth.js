@@ -15,7 +15,12 @@ export default function ({ store, redirect, error, route }) {
       !store.state.email ||
       !store.state.collectId
     ) {
-      store.dispatch("fetchUser", { token: store.getters.token });
+      store.dispatch("fetchUser", { token: store.getters.token }).then((response) => {
+        if (response === false) {
+          store.dispatch("logout");
+          redirect("/connexion");
+        }
+      });
     }
   }
 }
