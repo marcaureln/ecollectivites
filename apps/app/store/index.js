@@ -1,11 +1,7 @@
+import User from "~/models/user";
+
 export const state = () => ({
-  userId: null,
-  firstname: null,
-  lastname: null,
-  role: null,
-  phone: null,
-  email: null,
-  collectId: null,
+  user: null,
 });
 
 export const getters = {
@@ -25,64 +21,51 @@ export const getters = {
 };
 
 export const mutations = {
-  saveUser(state, { userId, firstname, lastname, role, phone, email, collectId }) {
-    state.userId = userId;
-    state.firstname = firstname;
-    state.lastname = lastname;
-    state.role = role;
-    state.collectId = collectId;
-    state.phone = phone;
-    state.email = email;
+  updateUser(state, userData) {
+    state.user = new User(userData);
+    return state.user;
+  },
+  removeUser(state) {
+    state.user = null;
   },
 };
 
 export const actions = {
   async login({ commit }, { method, phone, verifyToken, email, password }) {
-    if (method === "phone") {
-      try {
-        const headers = { Authorization: `Bearer ${verifyToken}` };
-        const user = await this.$axios.$post("/auth/login", { method: "phone", phone }, { headers });
-        commit("saveUser", user);
-        localStorage.setItem("token", user.token);
-        localStorage.setItem("method", "phone");
-        return true;
-      } catch (error) {
-        return false;
+    let response;
+
+    try {
+      switch (method) {
+        case "phone":
+          const headers = { Authorization: `Bearer ${verifyToken}` };
+          response = await this.$axios.$post("/auth/login", { method: "phone", phone }, { headers });
+          break;
+        case "email":
+          response = await this.$axios.$post("/auth/login", { method: "email", email, password });
+          break;
+        default:
+          throw new Error("Invalid login method");
       }
-    } else if (method === "email") {
-      try {
-        const user = await this.$axios.$post("/auth/login", { method: "email", email, password });
-        commit("saveUser", user);
-        localStorage.setItem("token", user.token);
-        localStorage.setItem("method", "email");
-        return true;
-      } catch (error) {
-        return false;
-      }
-    } else {
+    } catch (error) {
       return false;
     }
+
+    commit("updateUser", response);
+    localStorage.setItem("token", response.token);
+    localStorage.setItem("method", method);
+    return true;
   },
   async fetchUser({ commit }, { token }) {
     try {
       const headers = { Authorization: `Bearer ${token}` };
-      const user = await this.$axios.$get("/me", { headers });
-      commit("saveUser", user);
-      return user;
+      const response = await this.$axios.$get("/me", { headers });
+      return commit("updateUser", response);
     } catch (e) {
       return false;
     }
   },
   logout({ commit }) {
-    commit("saveUser", {
-      userId: null,
-      firstname: null,
-      lastname: null,
-      role: null,
-      phone: null,
-      email: null,
-      collectId: null,
-    });
+    commit("removeUser");
     localStorage.removeItem("token");
     localStorage.removeItem("method");
     window.location.reload();

@@ -64,8 +64,6 @@
 </template>
 
 <script>
-import { mapState, mapGetters } from "vuex";
-
 export default {
   middleware: ["auth"],
   head() {
@@ -74,27 +72,23 @@ export default {
     };
   },
   async asyncData({ $axios, store }) {
+    const user = store.state.user;
     const requestTypes = await $axios.$get("/requests/types");
     const collectTypes = await $axios.$get("/collectivites/types");
     const collects = await $axios.$get("/collectivites");
-    let userCollect = { collectTypeId: "", collectId: "" };
-
-    if (store.state.collectId) {
-      userCollect = await $axios.$get(`/collectivites/${store.state.collectId}`);
-    }
+    const { collectTypeId, collectId } = await $axios.$get(`/collectivites/${user.collectId}`);
 
     return {
-      collectTypeId: userCollect.collectTypeId,
-      collectId: userCollect.collectId,
+      collectTypeId,
+      collectId,
       requestTypes,
       collectTypes,
       collects,
-      userCollect,
+      user,
+      token: store.getters.token,
     };
   },
   computed: {
-    ...mapState({ userCollectId: "collectId", userId: "userId" }),
-    ...mapGetters(["token"]),
     filteredCollects() {
       return this.collects.filter((collect) => collect.collectTypeId == this.collectTypeId);
     },
@@ -118,7 +112,7 @@ export default {
         reqType: this.reqType,
         reqContent: this.reqContent,
         collectId: this.collectId,
-        userId: this.userId,
+        userId: this.user.id,
       };
 
       formData.append("data", JSON.stringify(data));

@@ -29,7 +29,7 @@ export default {
   layout: "dashboard-auth",
   middleware({ store, redirect, error }) {
     if (store.getters.isLoggedIn) {
-      if (["ADMIN", "AGENT"].includes(store.state.role)) {
+      if (store.user.isAgent) {
         redirect("/dashboard");
       } else {
         error({ statusCode: 403, message: "Vous n'avez pas les droits pour accéder à cette page" });

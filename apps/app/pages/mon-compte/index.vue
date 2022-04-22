@@ -40,9 +40,10 @@ export default {
   async asyncData({ $axios, store }) {
     const collectTypes = await $axios.$get("/collectivites/types");
     const collects = await $axios.$get("/collectivites");
-    const collectId = store.state.collectId;
-    const lastname = store.state.lastname;
-    const firstname = store.state.firstname;
+    const user = store.state.user;
+    const collectId = user.collectId;
+    const lastname = user.lastname;
+    const firstname = user.firstname;
     const loginMethod = store.getters.loginMethod;
 
     return {
