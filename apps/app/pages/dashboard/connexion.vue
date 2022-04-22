@@ -4,7 +4,7 @@
 
 <script>
 export default {
-  layout: "no-layout",
+  layout: "dashboard-auth",
 };
 </script>
 

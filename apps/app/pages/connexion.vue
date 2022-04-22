@@ -41,7 +41,7 @@
 import { mapActions } from "vuex";
 
 export default {
-  layout: "auth-layout",
+  layout: "default-auth",
   middleware({ store, redirect }) {
     if (store.getters.isLoggedIn) {
       redirect("/");
