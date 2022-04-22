@@ -1,9 +1,12 @@
 <template>
-  <div></div>
+  <div>
+    <h1>Bienvenue agent !</h1>
+  </div>
 </template>
 
 <script>
 export default {
+  middleware: ["auth"],
   layout: "dashboard",
 };
 </script>

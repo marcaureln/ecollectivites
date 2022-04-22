@@ -1,8 +1,6 @@
 <template>
   <div class="tiny-top-nav">
-    <nuxt-link to="">
-      <span class="bold">Agent de collectivités ?</span> S'indentifier
-    </nuxt-link>
+    <nuxt-link to="/dashboard/connexion"><span class="bold">Agent de collectivités ?</span> S'indentifier </nuxt-link>
   </div>
 </template>
 
