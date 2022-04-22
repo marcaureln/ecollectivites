@@ -5,6 +5,9 @@ export default {
   // Target: https://go.nuxtjs.dev/config-target
   target: "static",
 
+  // No server-side rendering (only client-side navigation)
+  mode: "spa",
+
   // Global page headers: https://go.nuxtjs.dev/config-head
   head: {
     title: "ecollectivites",

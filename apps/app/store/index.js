@@ -9,21 +9,16 @@ export const getters = {
     return getters.token != null;
   },
   token() {
-    if (process.client) {
-      return localStorage.getItem("token");
-    }
+    return localStorage.getItem("token");
   },
   loginMethod() {
-    if (process.client) {
-      return localStorage.getItem("method");
-    }
+    return localStorage.getItem("method");
   },
 };
 
 export const mutations = {
-  updateUser(state, userData) {
-    state.user = new User(userData);
-    return state.user;
+  updateUser(state, user) {
+    state.user = user;
   },
   removeUser(state) {
     state.user = null;
@@ -59,7 +54,9 @@ export const actions = {
     try {
       const headers = { Authorization: `Bearer ${token}` };
       const response = await this.$axios.$get("/me", { headers });
-      return commit("updateUser", response);
+      const user = new User(response);
+      commit("updateUser", user);
+      return user;
     } catch (e) {
       return false;
     }
