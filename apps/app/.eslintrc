@@ -1,0 +1,12 @@
+{
+  "extends": ["@nuxtjs"],
+  "rules": {
+    "quotes": [2, "double"],
+    "semi": [2, "always"],
+    "comma-dangle": [2, "only-multiline"],
+    "prefer-const": 1,
+    "no-console": 1,
+    "vue/attribute-hyphenation": 0,
+    "vue/singleline-html-element-content-newline": 0
+  }
+}

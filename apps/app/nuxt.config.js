@@ -43,6 +43,8 @@ export default {
     "@nuxtjs/google-fonts",
     // https://github.com/nuxt-community/style-resources-module
     "@nuxtjs/style-resources",
+    // https://github.com/nuxt-community/eslint-module
+    "@nuxtjs/eslint-module",
   ],
 
   // Axios module configuration: https://go.nuxtjs.dev/config-axios

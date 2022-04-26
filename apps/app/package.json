@@ -6,7 +6,8 @@
     "dev": "nuxt",
     "build": "nuxt build",
     "start": "nuxt start",
-    "generate": "nuxt generate"
+    "generate": "nuxt generate",
+    "lint": "eslint ."
   },
   "dependencies": {
     "@nuxtjs/axios": "^5.13.6",
@@ -20,11 +21,11 @@
     "webpack": "^4.46.0"
   },
   "devDependencies": {
+    "@nuxtjs/eslint-config": "^9.0.0",
+    "@nuxtjs/eslint-module": "^3.1.0",
     "@nuxtjs/style-resources": "^1.2.1",
+    "eslint": "^8.14.0",
     "sass": "^1.49.9",
     "sass-loader": "^10.2.1"
-  },
-  "prettier": {
-    "printWidth": 120
   }
 }
