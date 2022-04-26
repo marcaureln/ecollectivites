@@ -1,6 +1,6 @@
 <template>
   <header>
-    <TinyTopNav v-if="!isLoggedIn" />
+    <TinyTopNav :isLoggedIn="isLoggedIn" :isAgent="user != null && user.isAgent" />
     <nav>
       <div class="nav-start">
         <nuxt-link to="/">
@@ -24,7 +24,7 @@
 </template>
 
 <script>
-import { mapGetters } from "vuex";
+import { mapState, mapGetters } from "vuex";
 
 export default {
   mounted() {
@@ -32,6 +32,7 @@ export default {
   },
   computed: {
     ...mapGetters(["isLoggedIn"]),
+    ...mapState(["user"]),
   },
 };
 </script>
