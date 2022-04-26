@@ -6,7 +6,7 @@ export default {
   target: "static",
 
   // No server-side rendering (only client-side navigation)
-  mode: "spa",
+  ssr: false,
 
   // Global page headers: https://go.nuxtjs.dev/config-head
   head: {
