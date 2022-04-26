@@ -1,5 +1,5 @@
 <template>
-  <div :id="modalId" class="modal" :style="display" @click="dismiss">
+  <div v-if="isActive" :id="modalId" class="modal" @click="dismiss">
     <div class="modal-content" :style="contentWidth">
       <slot></slot>
     </div>
@@ -39,9 +39,6 @@ export default {
     },
   },
   computed: {
-    display() {
-      return `display: ${this.isActive ? "block" : "none"};`;
-    },
     contentWidth() {
       return `width: ${this.width};`;
     },
@@ -51,7 +48,7 @@ export default {
 
 <style lang="scss" scoped>
 .modal {
-  display: none;
+  display: block;
   position: fixed;
   z-index: 9;
   left: 0;
