@@ -33,7 +33,6 @@
 import { mapState, mapGetters } from "vuex";
 
 export default {
-  middleware: ["auth"],
   head() {
     return {
       title: "Mes Requêtes — eCollectivités",

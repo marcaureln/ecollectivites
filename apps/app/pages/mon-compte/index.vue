@@ -31,7 +31,6 @@
 import { mapActions } from "vuex";
 
 export default {
-  middleware: ["auth"],
   head() {
     return {
       title: "Mon Compte — eCollectivités",

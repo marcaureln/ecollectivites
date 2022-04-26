@@ -64,7 +64,6 @@
 import { mapGetters } from "vuex";
 
 export default {
-  middleware: ["auth"],
   head() {
     return {
       title: `Requête #${this.request.reqId} — eCollectivités`,
