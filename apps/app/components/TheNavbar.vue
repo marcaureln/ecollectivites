@@ -27,24 +27,11 @@
 import { mapGetters } from "vuex";
 
 export default {
-  data() {
-    return {
-      isLoginModalActive: false,
-    };
-  },
   mounted() {
     this.$forceUpdate();
   },
   computed: {
     ...mapGetters(["isLoggedIn"]),
-  },
-  methods: {
-    openLoginModal() {
-      this.isLoginModalActive = true;
-    },
-    closeLoginModal() {
-      this.isLoginModalActive = false;
-    },
   },
 };
 </script>
