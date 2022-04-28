@@ -1,0 +1,7 @@
+{
+  "vetur.format.defaultFormatter.html": "none",
+  "editor.formatOnSave": true,
+  "editor.codeActionsOnSave": {
+    "source.fixAll.eslint": true
+  }
+}
