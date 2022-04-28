@@ -6,11 +6,11 @@
       <form v-if="method == 'email'" class="" @submit.prevent="next()">
         <div class="form-group">
           <label for="email">Email :</label>
-          <input type="email" id="email" v-model="email" required />
+          <input id="email" v-model="email" type="email" required />
         </div>
         <div class="form-group">
           <label for="password">Mot de passe :</label>
-          <input type="password" id="password" v-model="password" required />
+          <input id="password" v-model="password" type="password" required />
         </div>
         <button type="submit" class="next-btn">Continuer</button>
         <button class="phone-login-btn" @click="changeMethod('phone')">Utiliser son téléphone</button>
@@ -20,7 +20,7 @@
       <form v-else class="" @submit.prevent="next()">
         <div class="form-group">
           <label for="phone">Numéro de téléphone :</label>
-          <input type="tel" id="phone" v-model="phone" required :disabled="isCodeSended" />
+          <input id="phone" v-model="phone" type="tel" required :disabled="isCodeSended" />
         </div>
         <div v-if="isCodeSended" class="form-group">
           <label for="code">Code de vérification :</label>
@@ -37,11 +37,11 @@
       <form @submit.prevent="register()">
         <div class="form-group">
           <label for="lastname">Nom :</label>
-          <input type="lastname" id="lastname" v-model="lastname" required />
+          <input id="lastname" v-model="lastname" type="lastname" required />
         </div>
         <div class="form-group">
           <label for="firstname">Prénoms :</label>
-          <input type="firstname" id="firstname" v-model="firstname" required />
+          <input id="firstname" v-model="firstname" type="firstname" required />
         </div>
         <div class="form-group">
           <label for="collect">Collectivité</label>
@@ -65,11 +65,6 @@ export default {
     if (store.getters.isLoggedIn) {
       redirect("/");
     }
-  },
-  head() {
-    return {
-      title: "S'inscrire — eCollectivités",
-    };
   },
   async asyncData({ $axios }) {
     const collectTypes = await $axios.$get("/collectivites/types");
@@ -95,33 +90,36 @@ export default {
       isLoginMethodProvided: false,
     };
   },
+  head() {
+    return {
+      title: "S'inscrire — eCollectivités",
+    };
+  },
   methods: {
     async next() {
-      if (this.method == "email") {
+      if (this.method === "email") {
         this.isLoginMethodProvided = true;
-      } else {
-        if (this.isCodeSended) {
-          try {
-            const verifyToken = (await this.checkVerificationCode({ phone: this.phone, code: this.code })).token;
-            if (verifyToken) {
-              this.verifyToken = verifyToken;
-              this.isLoginMethodProvided = true;
-            }
-          } catch (error) {
-            window.alert("Code invalide");
+      } else if (this.isCodeSended) {
+        try {
+          const verifyToken = (await this.checkVerificationCode({ phone: this.phone, code: this.code })).token;
+          if (verifyToken) {
+            this.verifyToken = verifyToken;
+            this.isLoginMethodProvided = true;
           }
-        } else {
-          this.sendVerificationCode({ phone: this.phone });
-          this.isCodeSended = true;
+        } catch (error) {
+          window.alert("Code invalide");
         }
+      } else {
+        this.sendVerificationCode({ phone: this.phone });
+        this.isCodeSended = true;
       }
     },
     async register() {
       let user;
 
       try {
-        if (this.method == "phone") {
-          const headers = { Authorization: `Bearer ${verifyToken}` };
+        if (this.method === "phone") {
+          const headers = { Authorization: `Bearer ${this.verifyToken}` };
           user = await this.$axios.$post(
             "/auth/signup",
             {
@@ -144,7 +142,7 @@ export default {
           });
         }
       } catch (error) {
-        windows.alert(error.message);
+        console.log(error.message);
       }
 
       if (user) {
@@ -160,7 +158,7 @@ export default {
       return await this.$axios.$post("/auth/verify/verification-check", { phone, code });
     },
     findCollectTypeLabel(collectTypeId) {
-      return this.collectTypes.find((collectType) => collectType.collectTypeId == collectTypeId).collectTypeLabel;
+      return this.collectTypes.find((collectType) => collectType.collectTypeId === collectTypeId).collectTypeLabel;
     },
     changeMethod(method) {
       this.method = method;

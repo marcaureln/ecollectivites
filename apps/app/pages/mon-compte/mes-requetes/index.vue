@@ -33,11 +33,6 @@
 import { mapState, mapGetters } from "vuex";
 
 export default {
-  head() {
-    return {
-      title: "Mes Requêtes — eCollectivités",
-    };
-  },
   async asyncData({ $axios, store, error }) {
     try {
       const headers = {
@@ -56,6 +51,11 @@ export default {
     } catch (e) {
       error(e);
     }
+  },
+  head() {
+    return {
+      title: "Mes Requêtes — eCollectivités",
+    };
   },
   computed: {
     ...mapState({ userCollectId: "collectId", userId: "userId" }),

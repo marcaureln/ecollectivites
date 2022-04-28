@@ -7,7 +7,7 @@
         <!-- Select collectivite type -->
         <div class="form-group">
           <label for="collect-type">Type de collectivité <em>*</em></label>
-          <select id="collect-type" class="form-control" v-model="collectTypeId" required>
+          <select id="collect-type" v-model="collectTypeId" class="form-control" required>
             <option value="">--Choisir un type de collectivité--</option>
             <option v-for="type in collectTypes" :key="type.collectTypeId" :value="type.collectTypeId">
               {{ type.collectTypeLabel }}
@@ -18,7 +18,7 @@
         <!-- Select collectivite -->
         <div class="form-group">
           <label for="collect">Collectivité <em>*</em></label>
-          <select id="collect" class="form-control" v-model="collectId" :disabled="!collectTypeId" required>
+          <select id="collect" v-model="collectId" class="form-control" :disabled="!collectTypeId" required>
             <option value="">--Choisir une collectivité--</option>
             <option v-for="collect in filteredCollects" :key="collect.collectId" :value="collect.collectId">
               {{ collect.collectName }}
@@ -30,7 +30,7 @@
       <!-- Select request type -->
       <div class="form-group">
         <label for="request-type">Type de requête <em>*</em></label>
-        <select id="request-type" class="form-control" v-model="reqType" required>
+        <select id="request-type" v-model="reqType" class="form-control" required>
           <option value="">--Choisir un type de requête--</option>
           <option v-for="type in requestTypes" :key="type.reqTypeId" :value="type.reqTypeId">
             {{ type.reqTypeLabel }}
@@ -42,12 +42,12 @@
       <div class="form-group">
         <label for="request-content">Détails Requête <em>*</em></label>
         <textarea
-          name="request-content"
           id="request-content"
+          v-model="reqContent"
+          name="request-content"
           cols="50"
           rows="10"
           placeholder="Comment pouvons-nous vous aider ? Commencez par une brève introduction puis ajouter toutes les informations qui pourrait être utiles au traitement de votre requête..."
-          v-model="reqContent"
           required
         ></textarea>
       </div>
@@ -55,21 +55,16 @@
       <!-- Upload files -->
       <div class="form-group">
         <label for="attachements">Fichiers</label>
-        <input type="file" name="attachements" id="attachements" multiple @change="handleFileUpload" />
+        <input id="attachements" type="file" name="attachements" multiple @change="handleFileUpload" />
       </div>
       <!-- Submit -->
-      <input type="submit" @click.prevent="submitRequest()" value="Envoyer" />
+      <input type="submit" value="Envoyer" @click.prevent="submitRequest()" />
     </form>
   </section>
 </template>
 
 <script>
 export default {
-  head() {
-    return {
-      title: "Faire une Requête — eCollectivités",
-    };
-  },
   async asyncData({ $axios, store }) {
     const user = store.state.user;
     const requestTypes = await $axios.$get("/requests/types");
@@ -87,17 +82,22 @@ export default {
       token: store.getters.token,
     };
   },
-  computed: {
-    filteredCollects() {
-      return this.collects.filter((collect) => collect.collectTypeId == this.collectTypeId);
-    },
-  },
   data() {
     return {
       reqType: "",
       reqContent: "",
       attachements: [],
     };
+  },
+  head() {
+    return {
+      title: "Faire une Requête — eCollectivités",
+    };
+  },
+  computed: {
+    filteredCollects() {
+      return this.collects.filter((collect) => collect.collectTypeId === this.collectTypeId);
+    },
   },
   methods: {
     handleFileUpload(event) {
@@ -106,7 +106,7 @@ export default {
       this.attachements = files;
     },
     async submitRequest() {
-      let formData = new FormData();
+      const formData = new FormData();
       const data = {
         reqType: this.reqType,
         reqContent: this.reqContent,
@@ -117,7 +117,7 @@ export default {
       formData.append("data", JSON.stringify(data));
 
       for (const file of this.attachements) {
-        formData.append(`attachements`, file);
+        formData.append("attachements", file);
       }
 
       try {

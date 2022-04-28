@@ -5,13 +5,13 @@
       <div class="form-group">
         <label for="lastname">Nom :</label>
         <div>
-          <input type="lastname" id="lastname" v-model="lastname" required />
+          <input id="lastname" v-model="lastname" type="lastname" required />
         </div>
       </div>
       <div class="form-group">
         <label for="firstname">Prénoms :</label>
         <div>
-          <input type="firstname" id="firstname" v-model="firstname" required />
+          <input id="firstname" v-model="firstname" type="firstname" required />
         </div>
       </div>
       <div class="form-group">
@@ -31,11 +31,6 @@
 import { mapActions } from "vuex";
 
 export default {
-  head() {
-    return {
-      title: "Mon Compte — eCollectivités",
-    };
-  },
   async asyncData({ $axios, store }) {
     const collectTypes = await $axios.$get("/collectivites/types");
     const collects = await $axios.$get("/collectivites");
@@ -55,10 +50,15 @@ export default {
       token: store.getters.token,
     };
   },
+  head() {
+    return {
+      title: "Mon Compte — eCollectivités",
+    };
+  },
   methods: {
     ...mapActions(["fetchUser"]),
     findCollectTypeLabel(collectTypeId) {
-      return this.collectTypes.find((collectType) => collectType.collectTypeId == collectTypeId).collectTypeLabel;
+      return this.collectTypes.find((collectType) => collectType.collectTypeId === collectTypeId).collectTypeLabel;
     },
     async updateInfo() {
       const headers = { Authorization: `Bearer ${this.token}` };

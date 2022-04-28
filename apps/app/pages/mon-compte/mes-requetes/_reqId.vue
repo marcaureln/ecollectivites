@@ -44,7 +44,7 @@
       <h2>Réponses</h2>
       <!-- TODO: Response component -->
       <div v-if="responses.length > 0">
-        <div class="response" v-for="response in responses" :key="response.resId">
+        <div v-for="response in responses" :key="response.resId" class="response">
           <p>{{ response.resContent }}</p>
         </div>
       </div>
@@ -53,7 +53,7 @@
       </div>
 
       <form @submit.prevent="sendResponse()">
-        <input type="text" placeholder="Ecrire une message..." v-model="resContent" required />
+        <input v-model="resContent" type="text" placeholder="Ecrire une message..." required />
         <input type="submit" value="Envoyer" />
       </form>
     </div>
@@ -64,11 +64,6 @@
 import { mapGetters } from "vuex";
 
 export default {
-  head() {
-    return {
-      title: `Requête #${this.request.reqId} — eCollectivités`,
-    };
-  },
   async asyncData({ params, $axios, store, error }) {
     const reqId = params.reqId;
 
@@ -99,10 +94,15 @@ export default {
       cdnUrl: this.$config.cdnUrl,
     };
   },
+  head() {
+    return {
+      title: `Requête #${this.request.reqId} — eCollectivités`,
+    };
+  },
   computed: {
     ...mapGetters(["token"]),
     reqAttachments() {
-      let attachments = this.request.reqAttachments.split(";");
+      const attachments = this.request.reqAttachments.split(";");
       attachments.pop(); // Pop because the separator at the end of the string append an empty string to the array.
       return attachments;
     },
@@ -117,8 +117,7 @@ export default {
       this.resAttachments = files;
     },
     async sendResponse() {
-      console.log("sending response");
-      let formData = new FormData();
+      const formData = new FormData();
       const data = {
         reqId: this.request.reqId,
         resContent: this.resContent,
@@ -127,10 +126,9 @@ export default {
       formData.append("data", JSON.stringify(data));
 
       for (const file of this.resAttachments) {
-        formData.append(`attachements`, file);
+        formData.append("attachements", file);
       }
 
-      console.log(formData);
       try {
         const headers = {
           "Content-Type": "multipart/form-data",

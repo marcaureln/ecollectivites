@@ -30,16 +30,13 @@ export const actions = {
     let response;
 
     try {
-      switch (method) {
-        case "phone":
-          const headers = { Authorization: `Bearer ${verifyToken}` };
-          response = await this.$axios.$post("/auth/login", { method: "phone", phone }, { headers });
-          break;
-        case "email":
-          response = await this.$axios.$post("/auth/login", { method: "email", email, password });
-          break;
-        default:
-          throw new Error("Invalid login method");
+      if (method === "phone") {
+        const headers = { Authorization: `Bearer ${verifyToken}` };
+        response = await this.$axios.$post("/auth/login", { method: "phone", phone }, { headers });
+      } else if (method === "email") {
+        response = await this.$axios.$post("/auth/login", { method: "email", email, password });
+      } else {
+        throw new Error("Invalid login method");
       }
     } catch (error) {
       return false;

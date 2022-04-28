@@ -4,11 +4,11 @@
     <form v-if="method === 'email'" class="email-login-form" @submit.prevent="loginWithEmail()">
       <div>
         <label for="email">Email :</label>
-        <input type="email" id="email" v-model="email" required />
+        <input id="email" v-model="email" type="email" required />
       </div>
       <div>
         <label for="password">Mot de passe :</label>
-        <input type="password" id="password" v-model="password" required />
+        <input id="password" v-model="password" type="password" required />
       </div>
       <button type="submit" class="login-btn">Se connecter</button>
       <button type="button" class="phone-login-btn" @click="changeMethod('phone')">
@@ -18,7 +18,7 @@
     <form v-else class="phone-login-form" @submit.prevent="loginWithPhone()">
       <div>
         <label for="phone">Numéro de téléphone :</label>
-        <input type="tel" id="phone" v-model="phone" :disabled="isCodeSended" required />
+        <input id="phone" v-model="phone" type="tel" :disabled="isCodeSended" required />
       </div>
       <p v-if="!isCodeSended">
         <a @click="alreadyHaveCode()">J'ai déjà un code</a>
@@ -47,11 +47,6 @@ export default {
       redirect("/");
     }
   },
-  head() {
-    return {
-      title: "Se connecter — eCollectivités",
-    };
-  },
   data() {
     return {
       method: "email",
@@ -60,6 +55,11 @@ export default {
       phone: "",
       code: "",
       isCodeSended: false,
+    };
+  },
+  head() {
+    return {
+      title: "Se connecter — eCollectivités",
     };
   },
   methods: {
