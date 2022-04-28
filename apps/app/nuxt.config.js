@@ -45,6 +45,8 @@ export default {
     "@nuxtjs/style-resources",
     // https://github.com/nuxt-community/eslint-module
     "@nuxtjs/eslint-module",
+    // https://github.com/nuxt-community/community-modules/tree/master/packages/toast
+    "@nuxtjs/toast",
   ],
 
   // Axios module configuration: https://go.nuxtjs.dev/config-axios
@@ -74,6 +76,13 @@ export default {
 
   styleResources: {
     scss: ["./assets/css/variables.scss", "./assets/css/mixins.scss"],
+  },
+
+  // Toast plugin configuration: https://github.com/shakee93/vue-toasted
+  toast: {
+    position: "bottom-center",
+    duration: 1000,
+    keepOnHove: true,
   },
 
   publicRuntimeConfig: {

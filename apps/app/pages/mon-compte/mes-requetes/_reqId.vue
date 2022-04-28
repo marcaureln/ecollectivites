@@ -134,11 +134,11 @@ export default {
           "Content-Type": "multipart/form-data",
           Authorization: `Bearer ${this.token}`,
         };
-        const response = await this.$axios.$post("/responses", formData, { headers });
-        console.log(response);
+        await this.$axios.$post("/responses", formData, { headers });
+        this.$toast.success("Réponse envoyée avec succès!");
         window.location.reload();
       } catch (error) {
-        console.log(error);
+        this.$toast.error("Une erreur est survenue. Veuillez réessayer plus tard.");
       }
     },
   },

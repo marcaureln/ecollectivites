@@ -125,10 +125,10 @@ export default {
           "Content-Type": "multipart/form-data",
           Authorization: `Bearer ${this.token}`,
         };
-        const response = await this.$axios.$post("/requests", formData, { headers });
-        console.log(response);
+        await this.$axios.$post("/requests", formData, { headers });
+        this.$toast.success("Requête envoyée avec succès!");
       } catch (error) {
-        console.log(error);
+        this.$toast.error("Une erreur est survenue. Veuillez réessayer plus tard.");
       }
     },
   },

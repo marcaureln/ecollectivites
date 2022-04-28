@@ -142,7 +142,7 @@ export default {
           });
         }
       } catch (error) {
-        console.log(error.message);
+        this.$toast.error("Une erreur est survenue. Veuillez réessayer plus tard.");
       }
 
       if (user) {
