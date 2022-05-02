@@ -1,7 +1,10 @@
 <template>
   <section>
     <div class="wrapper">
-      <nuxt-link to="/mon-compte/mes-requetes">Retourner</nuxt-link>
+      <nuxt-link to="/mon-compte/mes-requetes">
+        <ion-icon name="arrow-back"></ion-icon>
+        <span> Retourner </span>
+      </nuxt-link>
       <h1>{{ request.title }}</h1>
       <table>
         <tr>

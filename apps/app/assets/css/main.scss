@@ -20,3 +20,12 @@ a {
 .bold {
   font-weight: bold;
 }
+
+ion-icon {
+  vertical-align: middle;
+}
+
+ion-icon + span {
+  display: inline-block;
+  vertical-align: middle;
+}
