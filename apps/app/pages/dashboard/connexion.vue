@@ -27,9 +27,11 @@ import { mapActions } from "vuex";
 
 export default {
   layout: "dashboard-auth",
-  middleware({ store, redirect, error }) {
+  async middleware({ store, redirect, error }) {
     if (store.getters.isLoggedIn) {
-      if (store.user.isAgent) {
+      const user = store.state.user || (await store.dispatch("fetchUser", { token: store.getters.token }));
+
+      if (user.isAgent) {
         redirect("/dashboard");
       } else {
         error({ statusCode: 403, message: "Vous n'avez pas les droits pour accéder à cette page" });
@@ -57,7 +59,7 @@ export default {
       });
 
       if (response === true) {
-        this.$router.push("/dashboard");
+        this.$router.go("/dashboard");
       }
     },
   },
