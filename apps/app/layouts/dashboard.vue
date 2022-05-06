@@ -1,5 +1,6 @@
 <template>
-  <div>
+  <div class="wrapper">
+    <DashboardSidebar />
     <Nuxt />
   </div>
 </template>
@@ -8,4 +9,11 @@
 export default {};
 </script>
 
-<style lang="scss" scoped></style>
+<style lang="scss" scoped>
+.wrapper {
+  display: flex;
+  height: 100vh;
+  width: 100vw;
+  overflow: hidden;
+}
+</style>
