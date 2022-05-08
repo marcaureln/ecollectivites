@@ -1,12 +1,45 @@
 <template>
-  <div>
+  <div class="contacts--wrapper">
     <h1>Annuaire</h1>
+
+    <table>
+      <thead>
+        <tr>
+          <td>Nom</td>
+          <td>Prénoms</td>
+          <td>Adresse mail</td>
+          <td>Téléphone</td>
+          <td>Rôle</td>
+        </tr>
+      </thead>
+      <tbody>
+        <tr v-for="user in users" :key="user.userId">
+          <td>{{ user.lastname }}</td>
+          <td>{{ user.firstname }}</td>
+          <td>{{ user.email }}</td>
+          <td>{{ user.phone }}</td>
+          <td>{{ user.role }}</td>
+        </tr>
+      </tbody>
+    </table>
   </div>
 </template>
 
 <script>
 export default {
   layout: "dashboard",
+  async asyncData({ $axios, store, error }) {
+    try {
+      const headers = { Authorization: `Bearer ${store.getters.token}` };
+      const users = await $axios.$get(`/collectivites/${store.state.user.collectId}/users`, { headers });
+
+      return {
+        users,
+      };
+    } catch (e) {
+      error(e);
+    }
+  },
   head() {
     return {
       title: "Annuaire — Dashboard eCollectivités",
@@ -15,4 +48,26 @@ export default {
 };
 </script>
 
-<style lang="scss" scoped></style>
+<style lang="scss" scoped>
+.contacts--wrapper {
+  width: 100%;
+  height: 100%;
+  padding: 3rem;
+  background: #f6f6f6;
+}
+
+table {
+  width: 100%;
+  border: 1px solid #999;
+  border-collapse: collapse;
+}
+
+thead {
+  font-weight: bold;
+}
+
+td {
+  border: 1px solid #999;
+  padding: 1rem;
+}
+</style>

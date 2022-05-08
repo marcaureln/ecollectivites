@@ -1,5 +1,5 @@
 <template>
-  <div class="wrapper">
+  <div class="overview--wrapper">
     <h1>Bienvenue agent !</h1>
   </div>
 </template>
@@ -16,9 +16,10 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-.wrapper {
+.overview--wrapper {
   width: 100%;
+  height: 100%;
   padding: 3rem;
-  background: #eee;
+  background: #f6f6f6;
 }
 </style>

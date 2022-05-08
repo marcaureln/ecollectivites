@@ -1,6 +1,6 @@
 <template>
   <div class="inbox--wrapper">
-    <h1>Inbox</h1>
+    <h1>Boite de réception</h1>
 
     <table>
       <thead>
@@ -34,10 +34,7 @@ export default {
   layout: "dashboard",
   async asyncData({ $axios, store, error }) {
     try {
-      const headers = {
-        // "Content-Type": "multipart/form-data",
-        Authorization: `Bearer ${store.getters.token}`,
-      };
+      const headers = { Authorization: `Bearer ${store.getters.token}` };
       const requests = await $axios.$get(`/collectivites/${store.state.user.collectId}/requests`, { headers });
       const requestTypes = await $axios.$get("/requests/types");
       const requestStatus = await $axios.$get("/requests/status");
@@ -76,6 +73,7 @@ export default {
   width: 100%;
   height: 100%;
   padding: 3rem;
+  background: #f6f6f6;
 }
 
 table {
