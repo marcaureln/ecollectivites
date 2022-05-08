@@ -4,7 +4,7 @@ services:
     build: .
     command: npm run dev
     ports:
-      - "3000:3000"
+      - '8000:3000'
     volumes:
       - ./src:/app/src
       - ./public/uploads:/app/public/uploads
@@ -14,11 +14,11 @@ services:
       - DATABASE_URL=postgresql://postgres:admin@postgres:5432/prisma?schema=public
     depends_on:
       - postgres
-  
+
   postgres:
     image: postgres:alpine
     ports:
-      - "5432:5432"
+      - '5432:5432'
     environment:
       - POSTGRES_USER=postgres
       - POSTGRES_PASSWORD=admin
