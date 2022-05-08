@@ -1,6 +1,8 @@
 <template>
   <nav class="navbar--wrapper">
-    <nuxt-link to="/mon-compte" class="my-account">Mon compte</nuxt-link>
+    <nuxt-link to="/mon-compte" target="_blank" class="my-account">
+      Mon compte <ion-icon name="open"></ion-icon>
+    </nuxt-link>
     <button class="logout-btn" @click="logout()">Se déconnecter</button>
   </nav>
 </template>
