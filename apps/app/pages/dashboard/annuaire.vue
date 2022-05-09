@@ -16,8 +16,12 @@
         <tr v-for="user in users" :key="user.userId">
           <td>{{ user.lastname }}</td>
           <td>{{ user.firstname }}</td>
-          <td>{{ user.email }}</td>
-          <td>{{ user.phone }}</td>
+          <td>
+            <a :href="'mailto:' + user.email">{{ user.email }}</a>
+          </td>
+          <td>
+            <a :href="'tel:' + user.phone">{{ user.phone }}</a>
+          </td>
           <td>{{ user.role }}</td>
         </tr>
       </tbody>
