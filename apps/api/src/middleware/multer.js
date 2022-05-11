@@ -1,19 +1,20 @@
 const multer = require('multer');
-const fs = require('fs');
-const path = require('path');
+const multerS3 = require('multer-s3');
+const aws = require('aws-sdk');
 const { v4: uuidv4 } = require('uuid');
 
-const destination = path.join(__dirname, '../../public/uploads');
+const endpoint = new aws.Endpoint(process.env.DO_SPACES_ENDPOINT);
+const s3 = new aws.S3({
+	endpoint,
+	accessKeyId: process.env.DO_SPACES_KEY,
+	secretAccessKey: process.env.DO_SPACES_SECRET,
+});
 
-if (!fs.existsSync(destination)) {
-	fs.mkdirSync(destination);
-}
-
-const storage = multer.diskStorage({
-	destination: (req, file, callback) => {
-		callback(null, destination);
-	},
-	filename: (req, file, callback) => {
+const storage = multerS3({
+	s3,
+	acl: 'public-read',
+	bucket: process.env.DO_SPACES_NAME,
+	key: (req, file, callback) => {
 		const originalname = file.originalname.split(' ').join('_');
 		const namesplit = originalname.split('.');
 		const ext = namesplit[namesplit.length - 1];
@@ -22,4 +23,4 @@ const storage = multer.diskStorage({
 	},
 });
 
-module.exports = multer({ storage: storage }).array('attachements');
+module.exports = multer({ storage }).array('attachements');

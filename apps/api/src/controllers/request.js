@@ -19,7 +19,7 @@ exports.makeRequest = async function (req, res, next) {
 			throw new AppError(404, 'Request type not found');
 		}
 
-		const reqAttachments = req.files.reduce((prev, current) => (prev += `static/uploads/${current.filename};`), '');
+		const reqAttachments = req.files.reduce((list, file) => (list += `${file.location};`), '');
 		const inProgressStatus = await prisma.requestStatus.findFirst({ where: { reqStatusLabel: 'En cours' } });
 
 		const request = await prisma.request.create({

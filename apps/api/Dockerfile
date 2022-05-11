@@ -8,8 +8,6 @@ RUN npm set progress=false && npm install
 
 COPY . .
 
-RUN mkdir -p ./public/uploads
-
 # Disable Prisma telemetry
 ENV CHECKPOINT_DISABLE=1
 
