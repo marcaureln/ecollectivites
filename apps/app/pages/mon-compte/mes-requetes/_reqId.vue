@@ -36,7 +36,7 @@
       <div v-if="reqAttachments.length > 0">
         <ul>
           <li v-for="(file, index) in reqAttachments" :key="index">
-            <a :href="cdnUrl + '/' + file">{{ extractFilename(file) }}</a>
+            <a :href="file">{{ extractFilename(file) }}</a>
           </li>
         </ul>
       </div>
@@ -45,34 +45,25 @@
       </div>
 
       <h2>Réponses</h2>
-      <!-- TODO: Response component -->
       <div v-if="responses.length > 0">
-        <div v-for="response in responses" :key="response.resId" class="response">
-          <p>{{ response.resContent }}</p>
-        </div>
+        <RequestResponse v-for="response in responses" :key="response.resId" :response="response" :userId="userId" />
       </div>
       <div v-else>
         <p>Aucune reponse pour l'instant, revenez régulièrement pour voir si vous avez de nouvelles réponses...</p>
       </div>
 
-      <form @submit.prevent="sendResponse()">
-        <input v-model="resContent" type="text" placeholder="Ecrire une message..." required />
-        <input type="submit" value="Envoyer" />
-      </form>
+      <RequestResponseBox :reqId="request.reqId" :token="token" @responsesent="responsesent" />
     </div>
   </section>
 </template>
 
 <script>
-import { mapGetters } from "vuex";
-
 export default {
   async asyncData({ params, $axios, store, error }) {
     const reqId = params.reqId;
 
     try {
       const headers = {
-        "Content-Type": "multipart/form-data",
         Authorization: `Bearer ${store.getters.token}`,
       };
       const request = await $axios.$get(`/requests/${reqId}`, { headers });
@@ -81,6 +72,8 @@ export default {
       const requestStatus = await $axios.$get("/requests/status");
 
       return {
+        userId: store.state.user.id,
+        token: store.getters.token,
         request,
         responses,
         reqTypeLabel: requestTypes.find((type) => type.reqTypeId === request.reqTypeId).reqTypeLabel,
@@ -90,20 +83,12 @@ export default {
       return error(e);
     }
   },
-  data() {
-    return {
-      resContent: "",
-      resAttachments: [],
-      cdnUrl: this.$config.cdnUrl,
-    };
-  },
   head() {
     return {
       title: `Requête #${this.request.reqId} — eCollectivités`,
     };
   },
   computed: {
-    ...mapGetters(["token"]),
     reqAttachments() {
       const attachments = this.request.reqAttachments.split(";");
       attachments.pop(); // Pop because the separator at the end of the string append an empty string to the array.
@@ -114,34 +99,13 @@ export default {
     extractFilename(file) {
       return file.split("/").pop();
     },
-    handleFileUpload(event) {
-      const files = event.target.files || event.dataTransfer.files;
-      if (!files.length) return;
-      this.resAttachments = files;
-    },
-    async sendResponse() {
-      const formData = new FormData();
-      const data = {
-        reqId: this.request.reqId,
-        resContent: this.resContent,
-      };
-
-      formData.append("data", JSON.stringify(data));
-
-      for (const file of this.resAttachments) {
-        formData.append("attachements", file);
-      }
-
-      try {
-        const headers = {
-          "Content-Type": "multipart/form-data",
-          Authorization: `Bearer ${this.token}`,
-        };
-        await this.$axios.$post("/responses", formData, { headers });
-        this.$toast.success("Réponse envoyée avec succès!");
-        window.location.reload();
-      } catch (error) {
+    async responsesent(error) {
+      if (error) {
         this.$toast.error("Une erreur est survenue. Veuillez réessayer plus tard.");
+      } else {
+        this.$toast.success("Réponse envoyée avec succès!");
+        const headers = { Authorization: `Bearer ${this.token}` };
+        this.responses = await this.$axios.$get(`/requests/${this.request.reqId}/responses`, { headers });
       }
     },
   },
@@ -194,30 +158,5 @@ tr td:first-child {
 
 a {
   font-weight: bold;
-}
-
-form {
-  margin: 3rem 0;
-}
-
-input {
-  background-color: transparent;
-  border: 1px solid;
-  border-radius: 3px;
-  box-shadow: none;
-  padding: 0.5rem;
-  font-size: 1rem;
-  font-family: "Roboto", sans-serif;
-  width: 100%;
-  margin-bottom: 1rem;
-
-  &:focus {
-    border-color: $primary-variant;
-    outline: 0;
-  }
-
-  &[type="submit"] {
-    @include button;
-  }
 }
 </style>
