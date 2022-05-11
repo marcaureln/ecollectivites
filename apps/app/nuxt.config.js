@@ -69,10 +69,8 @@ export default {
       Roboto: [300, 400, 700],
       "Barlow+Condensed": [700],
     },
-    prefetch: true,
-    preconnect: true,
     download: true,
-    display: "swap",
+    inject: true,
   },
 
   styleResources: {
