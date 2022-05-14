@@ -160,7 +160,7 @@ export default {
           });
 
           if (loginResponse === true) {
-            this.$router.push("/");
+            window.location.reload();
           }
         } catch (error) {
           this.$toast.error(

@@ -72,7 +72,7 @@ export default {
       });
 
       if (response === true) {
-        this.$router.push("/");
+        window.location.reload();
       }
     },
     async loginWithPhone() {
@@ -86,7 +86,7 @@ export default {
         });
 
         if (loginResponse === true) {
-          this.$router.push("/");
+          window.location.reload();
         }
       } else {
         this.sendVerificationCode({ phone: this.phone });

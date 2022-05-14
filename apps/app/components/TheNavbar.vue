@@ -27,9 +27,6 @@
 import { mapState, mapGetters } from "vuex";
 
 export default {
-  mounted() {
-    this.$forceUpdate();
-  },
   computed: {
     ...mapGetters(["isLoggedIn"]),
     ...mapState(["user"]),
