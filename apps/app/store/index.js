@@ -47,6 +47,12 @@ export const actions = {
     localStorage.setItem("method", method);
     return true;
   },
+  async sendVerificationCode(context, { phone }) {
+    return await this.$axios.$post("/auth/verify/verification", { phone });
+  },
+  async checkVerificationCode(context, { phone, code }) {
+    return await this.$axios.$post("/auth/verify/verification-check", { phone, code });
+  },
   async fetchUser({ commit }, { token }) {
     try {
       const headers = { Authorization: `Bearer ${token}` };

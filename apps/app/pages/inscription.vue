@@ -59,6 +59,8 @@
 </template>
 
 <script>
+import { mapActions } from "vuex";
+
 export default {
   layout: "default-auth",
   middleware({ store, redirect }) {
@@ -96,6 +98,7 @@ export default {
     };
   },
   methods: {
+    ...mapActions(["login", "sendVerificationCode", "checkVerificationCode"]),
     async next() {
       if (this.method === "email") {
         this.isLoginMethodProvided = true;
@@ -146,16 +149,29 @@ export default {
       }
 
       if (user) {
-        this.$router.push("/connexion");
+        try {
+          const loginResponse = await this.login({
+            method: this.method,
+            email: this.email,
+            password: this.password,
+            phone: this.phone,
+            code: this.code,
+            verifyToken: this.verifyToken,
+          });
+
+          if (loginResponse === true) {
+            this.$router.push("/");
+          }
+        } catch (error) {
+          this.$toast.error(
+            "Nous n'avons pas pu vous connecter automatiquement. Vous serez redirigé vers la page de connexion dans un instant..."
+          );
+
+          setTimeout(function () {
+            this.$router.push("/connexion");
+          }, 3000);
+        }
       }
-    },
-    async sendVerificationCode({ phone }) {
-      // Response: { message }
-      return await this.$axios.$post("/auth/verify/verification", { phone });
-    },
-    async checkVerificationCode({ phone, code }) {
-      // Response: { phone, token }
-      return await this.$axios.$post("/auth/verify/verification-check", { phone, code });
     },
     findCollectTypeLabel(collectTypeId) {
       return this.collectTypes.find((collectType) => collectType.collectTypeId === collectTypeId).collectTypeLabel;
@@ -185,6 +201,7 @@ section {
 label {
   display: block;
   margin-bottom: 0.25rem;
+  font-weight: bold;
 }
 
 select {

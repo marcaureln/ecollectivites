@@ -63,7 +63,7 @@ export default {
     };
   },
   methods: {
-    ...mapActions(["login"]),
+    ...mapActions(["login", "sendVerificationCode", "checkVerificationCode"]),
     async loginWithEmail() {
       const response = await this.login({
         method: "email",
@@ -92,14 +92,6 @@ export default {
         this.sendVerificationCode({ phone: this.phone });
         this.isCodeSended = true;
       }
-    },
-    async sendVerificationCode({ phone }) {
-      // Response: { message }
-      return await this.$axios.$post("/auth/verify/verification", { phone });
-    },
-    async checkVerificationCode({ phone, code }) {
-      // Response: { phone, token }
-      return await this.$axios.$post("/auth/verify/verification-check", { phone, code });
     },
     reSendCode() {
       this.isCodeSended = false;
