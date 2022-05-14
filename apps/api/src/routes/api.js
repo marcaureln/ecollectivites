@@ -33,6 +33,7 @@ router.post('/requests', auth, multer, requestController.makeRequest);
 router.get('/requests/types', requestController.requestTypes);
 router.get('/requests/status', requestController.requestStatus);
 router.get('/requests/:reqId', auth, requestController.getRequest);
+router.post('/requests/:reqId/update', auth, requestController.updateRequest);
 router.get('/requests/:reqId/responses', auth, requestController.getRequestResponses);
 
 // Responses routes

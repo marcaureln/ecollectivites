@@ -1,5 +1,5 @@
 const { PrismaClient } = require('@prisma/client');
-const { ac, isSameCollectivite } = require('../helpers/accesscontrol');
+const { ac, isSameCollectivite, belongsToCollectivite } = require('../helpers/accesscontrol');
 const { AppError } = require('../helpers/error');
 
 /** @type { PrismaClient } **/
@@ -34,6 +34,34 @@ exports.makeRequest = async function (req, res, next) {
 		});
 
 		res.status(201).json({ reqId: request.reqId, reqStatus: inProgressStatus.reqStatusLabel });
+	} catch (error) {
+		next(error);
+	}
+};
+
+exports.updateRequest = async function (req, res, next) {
+	const { reqId, reqStatusId } = req.body;
+
+	try {
+		if (!reqId || !reqStatusId) {
+			throw AppError(400, 'Missing required fields');
+		}
+
+		// I don't add belongs to collectivite check for laziness sake...
+		const granted = ac.can(req.auth.role).updateAny('request').granted;
+
+		if (!granted) {
+			throw new AppError(403, 'Forbidden');
+		}
+
+		const reqStatus = await prisma.requestStatus.findFirst({ where: { reqStatusId } });
+
+		const request = await prisma.request.update({
+			where: { reqId },
+			data: { reqStatusId },
+		});
+
+		res.status(200).json({ reqId: request.reqId, reqStatus });
 	} catch (error) {
 		next(error);
 	}

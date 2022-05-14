@@ -15,6 +15,7 @@ ac.grant('USER')
 ac.grant('AGENT')
 	.extend('USER')
 	.updateOwn('account', ['!collectId', '!role'])
+	.updateAny('request')
 	.readAny('request')
 	.readAny('response')
 	.readAny('account');
