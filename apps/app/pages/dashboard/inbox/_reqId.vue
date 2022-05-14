@@ -89,6 +89,7 @@ export default {
         token: store.getters.token,
         request,
         responses,
+        requestStatus,
         reqTypeLabel: requestTypes.find((type) => type.reqTypeId === request.reqTypeId).reqTypeLabel,
         reqStatusLabel: requestStatus.find((status) => status.reqStatusId === request.reqStatusId).reqStatusLabel,
       };
@@ -118,7 +119,11 @@ export default {
       } else {
         this.$toast.success("Réponse envoyée avec succès!");
         const headers = { Authorization: `Bearer ${this.token}` };
+        this.request = await this.$axios.$get(`/requests/${this.request.reqId}`, { headers });
         this.responses = await this.$axios.$get(`/requests/${this.request.reqId}/responses`, { headers });
+        this.reqStatusLabel = this.requestStatus.find(
+          (status) => status.reqStatusId === this.request.reqStatusId
+        ).reqStatusLabel;
       }
     },
   },
