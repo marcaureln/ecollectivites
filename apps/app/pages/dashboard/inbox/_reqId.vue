@@ -5,8 +5,7 @@
     </h1>
 
     <div class="request--content">
-      <h2>{{ request.title }}</h2>
-
+      <h1>{{ request.title }}</h1>
       <table>
         <tr>
           <td>ID</td>
@@ -37,7 +36,7 @@
       <div v-if="reqAttachments.length > 0">
         <ul>
           <li v-for="(file, index) in reqAttachments" :key="index">
-            <a :href="cdnUrl + '/' + file">{{ extractFilename(file) }}</a>
+            <a :href="file">{{ extractFilename(file) }}</a>
           </li>
         </ul>
       </div>
@@ -46,27 +45,31 @@
       </div>
 
       <h2>Réponses</h2>
-      <!-- TODO: Response component -->
       <div v-if="responses.length > 0">
-        <div v-for="response in responses" :key="response.resId" class="response">
-          <p>{{ response.resContent }}</p>
-        </div>
+        <RequestResponse
+          v-for="response in responses"
+          :key="response.resId"
+          :response="response"
+          :userId="userId"
+          :isAgent="true"
+        />
       </div>
       <div v-else>
         <p>Aucune reponse pour l'instant, revenez régulièrement pour voir si vous avez de nouvelles réponses...</p>
       </div>
 
-      <form @submit.prevent="sendResponse()">
-        <input v-model="resContent" type="text" placeholder="Ecrire une message..." required />
-        <input type="submit" value="Envoyer" />
-      </form>
+      <RequestResponseBox
+        :reqId="request.reqId"
+        :reqStatusId="request.reqStatusId"
+        :token="token"
+        :isAgent="true"
+        @responsesent="responsesent"
+      />
     </div>
   </div>
 </template>
 
 <script>
-import { mapGetters } from "vuex";
-
 export default {
   layout: "dashboard",
   async asyncData({ params, $axios, store, error }) {
@@ -82,6 +85,8 @@ export default {
       const requestStatus = await $axios.$get("/requests/status");
 
       return {
+        userId: store.state.user.id,
+        token: store.getters.token,
         request,
         responses,
         reqTypeLabel: requestTypes.find((type) => type.reqTypeId === request.reqTypeId).reqTypeLabel,
@@ -91,20 +96,12 @@ export default {
       return error(e);
     }
   },
-  data() {
-    return {
-      resContent: "",
-      resAttachments: [],
-      cdnUrl: this.$config.cdnUrl,
-    };
-  },
   head() {
     return {
       title: `Requête #${this.request.reqId} — Dashboard eCollectivités`,
     };
   },
   computed: {
-    ...mapGetters(["token"]),
     reqAttachments() {
       const attachments = this.request.reqAttachments.split(";");
       attachments.pop(); // Pop because the separator at the end of the string append an empty string to the array.
@@ -115,34 +112,13 @@ export default {
     extractFilename(file) {
       return file.split("/").pop();
     },
-    handleFileUpload(event) {
-      const files = event.target.files || event.dataTransfer.files;
-      if (!files.length) return;
-      this.resAttachments = files;
-    },
-    async sendResponse() {
-      const formData = new FormData();
-      const data = {
-        reqId: this.request.reqId,
-        resContent: this.resContent,
-      };
-
-      formData.append("data", JSON.stringify(data));
-
-      for (const file of this.resAttachments) {
-        formData.append("attachements", file);
-      }
-
-      try {
-        const headers = {
-          "Content-Type": "multipart/form-data",
-          Authorization: `Bearer ${this.token}`,
-        };
-        await this.$axios.$post("/responses", formData, { headers });
-        this.$toast.success("Réponse envoyée avec succès!");
-        window.location.reload();
-      } catch (error) {
+    async responsesent(error) {
+      if (error) {
         this.$toast.error("Une erreur est survenue. Veuillez réessayer plus tard.");
+      } else {
+        this.$toast.success("Réponse envoyée avec succès!");
+        const headers = { Authorization: `Bearer ${this.token}` };
+        this.responses = await this.$axios.$get(`/requests/${this.request.reqId}/responses`, { headers });
       }
     },
   },
@@ -155,5 +131,25 @@ export default {
   height: 100%;
   padding: 3rem;
   background: #f6f6f6;
+  overflow-y: auto;
+}
+
+.request--content {
+  width: 80%;
+  margin: auto;
+}
+
+table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+td {
+  border: 1px solid #ccc;
+  padding: 1rem;
+}
+
+tr td:first-child {
+  font-weight: bold;
 }
 </style>

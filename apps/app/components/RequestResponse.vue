@@ -26,9 +26,17 @@ export default {
       type: String,
       required: true,
     },
+    isAgent: {
+      type: Boolean,
+      default: false,
+    },
   },
   computed: {
     resAuthor() {
+      if (this.isAgent) {
+        return this.response.userId === this.userId ? "Vous" : "Utilisateur";
+      }
+
       return this.response.userId === this.userId ? "Vous" : "Agent";
     },
     resAttachments() {

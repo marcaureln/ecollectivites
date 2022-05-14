@@ -1,9 +1,24 @@
 <template>
   <form @submit.prevent="sendResponse()">
     <input v-model="resContent" type="text" placeholder="Ecrire une message..." required />
-    <label for="attachements">Ajouter des fichiers</label>
-    <input id="attachements" type="file" name="attachements" multiple @change="handleFileUpload" />
-    <input type="submit" value="Envoyer" />
+
+    <div class="box--bottom">
+      <div>
+        <input id="attachements" type="file" name="attachements" multiple @change="handleFileUpload" />
+      </div>
+
+      <div class="box--actions">
+        <div v-if="isAgent" class="request-status">
+          <label for="request-status">Statut requête</label>
+          <select id="request-status" v-model.number="requestStatusId">
+            <option v-for="status in requestStatus" :key="status.reqStatusId" :value="status.reqStatusId">
+              {{ status.reqStatusLabel }}
+            </option>
+          </select>
+        </div>
+        <input type="submit" value="Envoyer" />
+      </div>
+    </div>
   </form>
 </template>
 
@@ -14,16 +29,29 @@ export default {
       type: String,
       required: true,
     },
+    reqStatusId: {
+      type: Number,
+      required: true,
+    },
     token: {
       type: String,
       required: true,
+    },
+    isAgent: {
+      type: Boolean,
+      default: false,
     },
   },
   data() {
     return {
       resContent: "",
       resAttachments: [],
+      requestStatus: [],
+      requestStatusId: this.reqStatusId,
     };
+  },
+  async fetch() {
+    this.requestStatus = await this.$axios.$get("/requests/status");
   },
   methods: {
     handleFileUpload(event) {
@@ -50,6 +78,17 @@ export default {
           Authorization: `Bearer ${this.token}`,
         };
         await this.$axios.$post("/responses", formData, { headers });
+
+        if (this.isAgent && this.requestStatusId !== this.reqStatusId) {
+          await this.$axios.$post(
+            `/requests/${this.reqId}/update`,
+            { reqId: this.reqId, reqStatusId: this.requestStatusId },
+            { headers: { Authorization: `Bearer ${this.token}` } }
+          );
+        }
+
+        this.resContent = "";
+        this.resAttachments = [];
         this.$emit("responsesent");
       } catch (error) {
         this.$emit("responsesent", error);
@@ -62,12 +101,14 @@ export default {
 <style lang="scss" scoped>
 form {
   margin: 3rem 0;
+  padding: 1rem;
+  border: 1px solid #ccc;
+  border-radius: 3px;
 }
 
 input {
   background-color: transparent;
-  border: 1px solid;
-  border-radius: 3px;
+  border: none;
   box-shadow: none;
   padding: 0.5rem;
   font-size: 1rem;
@@ -82,6 +123,28 @@ input {
 
   &[type="submit"] {
     @include button;
+  }
+}
+
+.box--bottom {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.box--actions {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.request-status {
+  display: flex;
+  margin-right: 1rem;
+
+  label {
+    display: inline-block;
+    margin-right: 0.5rem;
   }
 }
 </style>
