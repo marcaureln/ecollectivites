@@ -39,13 +39,17 @@ export const actions = {
         throw new Error("Invalid login method");
       }
     } catch (error) {
-      return false;
+      if (error.response.status === 403) {
+        return { loggedIn: false, expiredPassword: true };
+      }
+
+      return { loggedIn: false };
     }
 
     commit("updateUser", response);
     localStorage.setItem("token", response.token);
     localStorage.setItem("method", method);
-    return true;
+    return { loggedIn: true };
   },
   async sendVerificationCode(context, { phone }) {
     return await this.$axios.$post("/auth/verify/verification", { phone });

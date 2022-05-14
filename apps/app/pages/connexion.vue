@@ -71,7 +71,7 @@ export default {
         password: this.password,
       });
 
-      if (response === true) {
+      if (response.loggedIn === true) {
         window.location.reload();
       }
     },
@@ -85,7 +85,7 @@ export default {
           verifyToken,
         });
 
-        if (loginResponse === true) {
+        if (loginResponse.loggedIn === true) {
           window.location.reload();
         }
       } else {

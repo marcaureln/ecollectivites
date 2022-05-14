@@ -58,8 +58,14 @@ export default {
         password: this.password,
       });
 
-      if (response === true) {
+      if (response.loggedIn === true) {
+        // Don't know why, but router.push doesn't work here 🤷‍♂️
         this.$router.go("/dashboard");
+      } else if (response.expiredPassword === true) {
+        this.$router.push({
+          path: "/reinitialiser-mdp",
+          query: { email: this.email, redirect: "/dashboard/connexion" },
+        });
       }
     },
   },

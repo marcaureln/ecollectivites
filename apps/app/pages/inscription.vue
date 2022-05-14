@@ -159,7 +159,7 @@ export default {
             verifyToken: this.verifyToken,
           });
 
-          if (loginResponse === true) {
+          if (loginResponse.loggedIn === true) {
             window.location.reload();
           }
         } catch (error) {
