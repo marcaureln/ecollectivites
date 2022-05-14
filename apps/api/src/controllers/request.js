@@ -1,5 +1,5 @@
 const { PrismaClient } = require('@prisma/client');
-const { ac } = require('../helpers/accesscontrol');
+const { ac, isSameCollectivite } = require('../helpers/accesscontrol');
 const { AppError } = require('../helpers/error');
 
 /** @type { PrismaClient } **/
