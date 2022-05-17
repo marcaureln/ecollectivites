@@ -12,4 +12,8 @@ export default class User {
   get isAgent() {
     return ["AGENT", "ADMIN"].includes(this.role);
   }
+
+  get isAdmin() {
+    return this.role === "ADMIN";
+  }
 }

@@ -17,6 +17,13 @@ export default async function ({ store, redirect, error, route }) {
         message: "Seuls les agents peuvent accéder à cette page",
       });
     }
+
+    if (requireAdmin(route) && !user.isAdmin) {
+      return error({
+        statusCode: 403,
+        message: "Seuls les administrateurs peuvent accéder à cette page",
+      });
+    }
   }
 }
 
@@ -34,4 +41,10 @@ function requireAgent(route) {
     exceptRoutes.includes(route.path) === false &&
     guardedRoutes.find((guardedRoute) => route.path.startsWith(guardedRoute))
   );
+}
+
+function requireAdmin(route) {
+  const guardedRoutes = ["/dashboard/admin"];
+
+  return guardedRoutes.find((guardedRoute) => route.path.startsWith(guardedRoute));
 }

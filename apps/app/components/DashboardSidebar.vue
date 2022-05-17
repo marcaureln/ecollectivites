@@ -18,8 +18,8 @@
       </li>
     </ul>
 
-    <h3>Administration</h3>
-    <ul>
+    <h3 v-if="isAdmin">Administration</h3>
+    <ul v-if="isAdmin">
       <li>
         <nuxt-link to="/dashboard/admin/ajouter-agent">
           <ion-icon name="person-add"></ion-icon>Ajouter agent
@@ -57,7 +57,16 @@
 </template>
 
 <script>
-export default {};
+import { mapState } from "vuex";
+
+export default {
+  computed: {
+    ...mapState(["user"]),
+    isAdmin() {
+      return this.user.isAdmin;
+    },
+  },
+};
 </script>
 
 <style lang="scss" scoped>
