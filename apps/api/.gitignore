@@ -116,3 +116,11 @@ dist
 .yarn/build-state.yml
 .yarn/install-state.gz
 .pnp.*
+
+# File upload
+public/uploads/
+
+# Docker
+# .dockerignore
+# Dockerfile
+# docker-compose.yaml
