@@ -10,7 +10,7 @@
             <td>Type Requête</td>
             <td>Date de soumission</td>
             <td>Statut</td>
-            <td></td>
+            <td>Actions</td>
           </tr>
         </thead>
         <tbody>
@@ -93,30 +93,7 @@ h1 {
 }
 
 table {
-  border-spacing: 0;
-  display: block;
   overflow-x: auto;
-  text-align: left;
-  width: 100%;
-}
-
-thead {
-  font-weight: bold;
-  font-style: italic;
-}
-
-td,
-th {
-  border-bottom: 0.1rem solid;
-  padding: 1.2rem 1.5rem;
-
-  &:first-child {
-    padding-left: 0;
-  }
-
-  &:last-child {
-    padding-right: 0;
-  }
 }
 
 .status,

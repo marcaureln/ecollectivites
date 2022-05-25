@@ -136,16 +136,6 @@ export default {
   margin: auto;
 }
 
-table {
-  width: 100%;
-  border-collapse: collapse;
-}
-
-td {
-  border: 1px solid #ccc;
-  padding: 1rem;
-}
-
 tr td:first-child {
   font-weight: bold;
 }

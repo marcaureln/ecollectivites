@@ -130,28 +130,6 @@ h2 {
   margin: 2rem 0 1rem 0;
 }
 
-table {
-  border-spacing: 0;
-  display: block;
-  overflow-x: auto;
-  text-align: left;
-  width: 100%;
-  margin: 1rem 0;
-}
-
-td {
-  border-bottom: 0.1rem solid;
-  padding: 1.2rem 1.5rem;
-
-  &:first-child {
-    padding-left: 0;
-  }
-
-  &:last-child {
-    padding-right: 0;
-  }
-}
-
 tr td:first-child {
   font-weight: bold;
 }

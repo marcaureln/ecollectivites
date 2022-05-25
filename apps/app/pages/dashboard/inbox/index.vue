@@ -68,19 +68,4 @@ export default {
 };
 </script>
 
-<style lang="scss" scoped>
-table {
-  width: 100%;
-  border: 1px solid #999;
-  border-collapse: collapse;
-}
-
-thead {
-  font-weight: bold;
-}
-
-td {
-  border: 1px solid #999;
-  padding: 1rem;
-}
-</style>
+<style lang="scss" scoped></style>
