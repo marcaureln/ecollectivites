@@ -1,16 +1,97 @@
 <template>
-  <div class=""></div>
+  <div class="manage-agent--wrapper">
+    <h1>
+      <nuxt-link to="/dashboard/admin/gerer-agent"><ion-icon name="arrow-back"></ion-icon></nuxt-link> Agent
+      {{ agent.userId }}
+    </h1>
+
+    <form @submit.prevent="updateInfo()">
+      <div class="form-group">
+        <label for="lastname">Nom :</label>
+        <input id="lastname" v-model="lastname" type="lastname" required />
+      </div>
+      <div class="form-group">
+        <label for="firstname">Prénoms :</label>
+        <input id="firstname" v-model="firstname" type="firstname" required />
+      </div>
+      <div class="form-group">
+        <label for="email">Email :</label>
+        <input id="email" v-model="email" type="email" required />
+      </div>
+      <div class="form-group">
+        <label for="phone">Téléphone :</label>
+        <input id="phone" v-model="phone" type="tel" />
+      </div>
+      <!-- TODO: Update API -->
+      <!-- <div class="form-group">
+        <label for="role">Rôle :</label>
+        <select id="role" v-model="role" required>
+          <option v-for="(value, index) in roles" :key="index" :value="value">{{ value }}</option>
+        </select>
+      </div> -->
+      <button type="submit">Modifier</button>
+    </form>
+  </div>
 </template>
 
 <script>
 export default {
   layout: "dashboard",
+  async asyncData({ params, $axios, store, error }) {
+    const agentId = params.userId;
+
+    try {
+      const headers = { Authorization: `Bearer ${store.getters.token}` };
+      const agent = await $axios.$get(`/users/${agentId}`, { headers });
+      const roles = await $axios.$get("/users/roles");
+
+      return {
+        userId: store.state.user.id,
+        token: store.getters.token,
+        agent,
+        firstname: agent.firstname,
+        lastname: agent.lastname,
+        phone: agent.phone,
+        email: agent.email,
+        role: agent.role,
+        roles,
+      };
+    } catch (e) {
+      return error(e);
+    }
+  },
   head() {
     return {
-      title: "Agent _ — Dashboard eCollectivités",
+      title: `Agent ${this.agent.userId} — Dashboard eCollectivités`,
     };
+  },
+  methods: {
+    async updateInfo() {
+      try {
+        const headers = { Authorization: `Bearer ${this.token}` };
+        const response = await this.$axios.$post(
+          `/users/${this.agent.userId}/update`,
+          { firstname: this.firstname, lastname: this.lastname, email: this.email, phone: this.phone },
+          { headers }
+        );
+
+        if (response) {
+          this.$toast.success("Utilisateur modifié avec succès!");
+        }
+      } catch (error) {
+        this.$toast.error("Une erreur est survenue. Veuillez réessayer plus tard.");
+      }
+    },
   },
 };
 </script>
 
-<style lang="scss" scoped></style>
+<style lang="scss" scoped>
+.manage-agent--wrapper {
+  width: 100%;
+  height: 100%;
+  padding: 3rem;
+  background: #f6f6f6;
+  overflow-y: auto;
+}
+</style>

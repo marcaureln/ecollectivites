@@ -38,6 +38,18 @@
 <script>
 export default {
   layout: "dashboard",
+  async asyncData({ $axios, store, error }) {
+    try {
+      const headers = { Authorization: `Bearer ${store.getters.token}` };
+      const users = await $axios.$get(`/collectivites/${store.state.user.collectId}/users`, { headers });
+
+      return {
+        users,
+      };
+    } catch (e) {
+      error(e);
+    }
+  },
   head() {
     return {
       title: "Gérer les agents — Dashboard eCollectivités",
@@ -46,4 +58,26 @@ export default {
 };
 </script>
 
-<style lang="scss" scoped></style>
+<style lang="scss" scoped>
+.manage-agent--wrapper {
+  width: 100%;
+  height: 100%;
+  padding: 3rem;
+  background: #f6f6f6;
+}
+
+table {
+  width: 100%;
+  border: 1px solid #999;
+  border-collapse: collapse;
+}
+
+thead {
+  font-weight: bold;
+}
+
+td {
+  border: 1px solid #999;
+  padding: 1rem;
+}
+</style>
