@@ -1,6 +1,6 @@
 <template>
   <footer>
-    <div class="wrapper">
+    <div class="footer--wrapper">
       <div class="footer-logo">
         <nuxt-link to="/">
           <img src="@/assets/img/logo-large.png" alt="Logo eCollectivités" class="logo" />
@@ -11,11 +11,10 @@
         <nuxt-link to="/a-propos" class="nav-link">À propos</nuxt-link>
         <nuxt-link to="/nous-contacter" class="nav-link">Nous contacter</nuxt-link>
       </div>
-      <div class="footer-legal">
-        <div>&#169; eCollectivités. 2022 Tous droits réservés.</div>
-        <nuxt-link to="/protection-donnees" class="nav-link"> Politique de confidentialité. </nuxt-link>
-        <nuxt-link to="/cgu" class="nav-link"> Conditions d'utilisation. </nuxt-link>
-      </div>
+    </div>
+
+    <div class="footer-legal">
+      <p>&#169; 2022 eCollectivités. Tous droits réservés.</p>
     </div>
   </footer>
 </template>
@@ -30,11 +29,10 @@ footer {
   color: white;
   background-color: black;
   margin: 0;
-  padding: 9rem 0;
+  padding: 6rem 20% 2rem;
 }
 
-.wrapper {
-  width: 60%;
+.footer--wrapper {
   margin: auto;
   display: flex;
   justify-content: space-between;
@@ -50,6 +48,7 @@ footer {
 .footer-links {
   display: flex;
   flex-direction: column;
+  text-align: right;
 
   a {
     font-size: 1.25rem;
@@ -59,17 +58,7 @@ footer {
 }
 
 .footer-legal {
-  display: flex;
-  flex-direction: column;
-  text-align: right;
-
-  div {
-    margin-bottom: 1rem;
-  }
-
-  a {
-    font-weight: bold;
-    margin-bottom: 1rem;
-  }
+  margin-top: 4rem;
+  text-align: center;
 }
 </style>
