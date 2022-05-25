@@ -69,13 +69,6 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-.inbox--wrapper {
-  width: 100%;
-  height: 100%;
-  padding: 3rem;
-  background: #f6f6f6;
-}
-
 table {
   width: 100%;
   border: 1px solid #999;

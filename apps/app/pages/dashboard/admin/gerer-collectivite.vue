@@ -69,4 +69,14 @@ export default {
 };
 </script>
 
-<style lang="scss" scoped></style>
+<style lang="scss" scoped>
+form {
+  width: 400px;
+  margin: auto;
+  margin-top: 3rem;
+}
+
+button {
+  width: 100%;
+}
+</style>

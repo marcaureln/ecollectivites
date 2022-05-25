@@ -65,14 +65,6 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-.overview--wrapper {
-  width: 100%;
-  height: 100%;
-  padding: 3rem;
-  background: $dashboard-background;
-  overflow-y: auto;
-}
-
 .overview--header {
   display: flex;
   margin-bottom: 6rem;

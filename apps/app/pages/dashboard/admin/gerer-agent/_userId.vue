@@ -1,18 +1,22 @@
 <template>
   <div class="manage-agent--wrapper">
     <h1>
-      <nuxt-link to="/dashboard/admin/gerer-agent"><ion-icon name="arrow-back"></ion-icon></nuxt-link> Agent
-      {{ agent.userId }}
+      <nuxt-link to="/dashboard/admin/gerer-agent"><ion-icon name="arrow-back"></ion-icon></nuxt-link>
+      {{ firstname + " " + lastname }}
     </h1>
 
     <form @submit.prevent="updateInfo()">
       <div class="form-group">
+        <label for="agent-id">ID :</label>
+        <input id="agent-id" v-model="agentId" type="text" disabled />
+      </div>
+      <div class="form-group">
         <label for="lastname">Nom :</label>
-        <input id="lastname" v-model="lastname" type="lastname" required />
+        <input id="lastname" v-model="lastname" type="text" required />
       </div>
       <div class="form-group">
         <label for="firstname">Prénoms :</label>
-        <input id="firstname" v-model="firstname" type="firstname" required />
+        <input id="firstname" v-model="firstname" type="text" required />
       </div>
       <div class="form-group">
         <label for="email">Email :</label>
@@ -49,6 +53,7 @@ export default {
         userId: store.state.user.id,
         token: store.getters.token,
         agent,
+        agentId,
         firstname: agent.firstname,
         lastname: agent.lastname,
         phone: agent.phone,
@@ -87,11 +92,13 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-.manage-agent--wrapper {
+form {
+  width: 400px;
+  margin: auto;
+  margin-top: 3rem;
+}
+
+button {
   width: 100%;
-  height: 100%;
-  padding: 3rem;
-  background: #f6f6f6;
-  overflow-y: auto;
 }
 </style>

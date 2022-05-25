@@ -131,14 +131,6 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-.request--wrapper {
-  width: 100%;
-  height: 100%;
-  padding: 3rem;
-  background: #f6f6f6;
-  overflow-y: auto;
-}
-
 .request--content {
   width: 80%;
   margin: auto;

@@ -3,7 +3,7 @@
     <DashboardSidebar />
     <div class="dashboard--main">
       <DashboardNavbar />
-      <Nuxt />
+      <Nuxt class="dashboard--content" />
     </div>
   </div>
 </template>
@@ -25,5 +25,13 @@ export default {};
   flex-direction: column;
   width: 100%;
   height: 100%;
+}
+
+.dashboard--content {
+  background: $dashboard-background;
+  width: 100%;
+  height: 100%;
+  padding: 3rem;
+  overflow-y: auto;
 }
 </style>
