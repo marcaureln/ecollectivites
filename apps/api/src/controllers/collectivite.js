@@ -190,7 +190,7 @@ exports.updateCollectivite = async function (req, res, next) {
 			throw new AppError(404, 'Collectivite not found');
 		}
 
-		const permission = (await belongsToCollectivite(req.user.userId, collectId))
+		const permission = (await belongsToCollectivite(req.auth.userId, collectId))
 			? ac.can(req.auth.role).updateOwn('collectivite')
 			: ac.can(req.auth.role).updateAny('collectivite');
 
