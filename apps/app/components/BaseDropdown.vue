@@ -21,7 +21,7 @@ export default {
     // Classes must be registered globally (in main.scss file, or not scoped in parent SFC style)
     classList: {
       type: Array,
-      default: ["dropdown-btn-default"],
+      default: () => ["dropdown-btn-default"],
     },
   },
   data() {
@@ -60,7 +60,7 @@ export default {
       const dropdowns = document.getElementsByClassName("dropdown-content");
 
       for (const dropdown of dropdowns) {
-        if (dropdown.id != this.dropdownContentId && dropdown.classList.contains("show-dropdown")) {
+        if (dropdown.id !== this.dropdownContentId && dropdown.classList.contains("show-dropdown")) {
           dropdown.classList.remove("show-dropdown");
         }
       }

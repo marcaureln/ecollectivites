@@ -1,5 +1,5 @@
 <template>
-  <BaseDropdown :label="'Mon Compte'" :classList="['my-account-btn']" id="my-account-dropdown">
+  <BaseDropdown id="my-account-dropdown" :label="'Mon Compte'" :classList="['my-account-btn']">
     <nuxt-link to="/mon-compte/mes-requetes">Mes requêtes</nuxt-link>
     <nuxt-link to="/mon-compte/nouvelle-requete">Faire une requête</nuxt-link>
     <nuxt-link to="/mon-compte">Modifier mes informations</nuxt-link>

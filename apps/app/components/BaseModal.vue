@@ -25,6 +25,11 @@ export default {
       modalId: null,
     };
   },
+  computed: {
+    contentWidth() {
+      return `width: ${this.width};`;
+    },
+  },
   mounted() {
     this.modalId = nanoid();
   },
@@ -36,11 +41,6 @@ export default {
     },
     closeModal() {
       this.$emit("close");
-    },
-  },
-  computed: {
-    contentWidth() {
-      return `width: ${this.width};`;
     },
   },
 };
