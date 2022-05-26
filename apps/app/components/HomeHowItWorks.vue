@@ -6,29 +6,20 @@
         <div class="step">
           <h2>Créer un compte</h2>
           <p>
-            Lorem ipsum dolor sit amet consectetur, adipisicing elit. Dolores
-            corrupti ab harum. Blanditiis distinctio ipsum similique architecto
-            quo, aspernatur amet nesciunt repudiandae! Itaque, sapiente
-            similique? Asperiores sequi distinctio officia animi.
+            Vous devez créer un compte avec votre adresse mail ou votre numéro de téléphone pour avoir accès à certaines
+            fonctionnalités comme la création d'une requête.
           </p>
         </div>
         <div class="step">
           <h2>Faire sa requête</h2>
           <p>
-            Lorem ipsum dolor sit amet consectetur, adipisicing elit. Dolores
-            corrupti ab harum. Blanditiis distinctio ipsum similique architecto
-            quo, aspernatur amet nesciunt repudiandae! Itaque, sapiente
-            similique? Asperiores sequi distinctio officia animi.
+            Dans l'onglet <strong>Mon Compte</strong>, cliquez sur <strong>Faire une requête</strong> et remplissez le
+            formulaire, puis cliquez sur <strong>Envoyer</strong>.
           </p>
         </div>
         <div class="step">
           <h2>Consulter</h2>
-          <p>
-            Lorem ipsum dolor sit amet consectetur, adipisicing elit. Dolores
-            corrupti ab harum. Blanditiis distinctio ipsum similique architecto
-            quo, aspernatur amet nesciunt repudiandae! Itaque, sapiente
-            similique? Asperiores sequi distinctio officia animi.
-          </p>
+          <p>Revenez régulièrement pour voir l'avancement de vos requêtes.</p>
         </div>
       </div>
     </div>
@@ -59,7 +50,10 @@ export default {};
 .steps {
   display: flex;
   justify-content: space-between;
-  gap: 2rem;
+}
+
+.step {
+  width: 30%;
 }
 
 h1 {

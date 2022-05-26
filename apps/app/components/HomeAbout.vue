@@ -2,11 +2,10 @@
   <section>
     <h1>Qui sommes-nous ?</h1>
     <p>
-      Lorem ipsum dolor sit, amet consectetur adipisicing elit. Assumenda quis, animi dignissimos autem perferendis
-      obcaecati, inventore qui omnis tempore error, quia rerum quod consequuntur ut fuga cupiditate natus suscipit
-      doloremque. Lorem ipsum dolor sit amet consectetur adipisicing elit. Quisquam temporibus illo voluptate ea vitae
-      architecto porro provident! Explicabo ipsam, quaerat illo ducimus cum quasi laboriosam corporis doloremque
-      exercitationem error possimus.
+      eCollectivités permet de réduire les inégalités concernant la présence en ligne des collectivités, car elles n’ont
+      pas toutes les ressources financières et humaines pour disposer d'un site internet. De plus, cette plateforme
+      facilite la collaboration entre les collectivités et aussi permet de délivrer numériquement vos documents
+      administratifs.
     </p>
     <nuxt-link to="/a-propos" class="button">En savoir plus</nuxt-link>
   </section>

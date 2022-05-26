@@ -1,9 +1,9 @@
 <template>
-  <div>
+  <div class="contact--wrapper">
     <h1>Besoin d'aide ?</h1>
     <p>
-      Lorem ipsum dolor sit amet consectetur adipisicing elit. Laborum omnis voluptatibus ex animi minima inventore
-      labore earum, facilis magni velit quae beatae? Optio enim quo recusandae alias nam inventore repudiandae?
+      Vous rencontrez un problème, vous n'arrivez pas à vous connecter ou vous ne trouvez pas de réponse à votre requête
+      ? Contactez-nous à l'adresse suivante : <a href="mailto:contact@bnetd.ci" class="bold">contact@bnetd.ci</a>
     </p>
   </div>
 </template>
@@ -12,4 +12,9 @@
 export default {};
 </script>
 
-<style lang="scss" scoped></style>
+<style lang="scss" scoped>
+.contact--wrapper {
+  width: 100vw;
+  padding: 10vh 30vw 20vh;
+}
+</style>
