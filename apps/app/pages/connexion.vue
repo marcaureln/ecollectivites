@@ -87,6 +87,11 @@ export default {
 
         if (loginResponse.loggedIn === true) {
           window.location.reload();
+        } else if (loginResponse.expiredPassword === true) {
+          this.$router.push({
+            path: "/reinitialiser-mdp",
+            query: { email: this.email, redirect: "/connexion" },
+          });
         }
       } else {
         this.sendVerificationCode({ phone: this.phone });
