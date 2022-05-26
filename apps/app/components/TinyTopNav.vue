@@ -4,7 +4,7 @@
       <span class="bold">Agent connecté |</span> Se rendre au tableau de bord
     </nuxt-link>
     <nuxt-link v-else to="/dashboard/connexion">
-      <span class="bold">Agent de collectivités ?</span> S'indentifier
+      <span class="bold">Agent de collectivités ?</span> S'identifier
     </nuxt-link>
   </div>
 </template>
