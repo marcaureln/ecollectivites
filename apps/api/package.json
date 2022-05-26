@@ -6,7 +6,8 @@
 	"scripts": {
 		"seed": "npx prisma migrate reset --force && node src/seeders/seeder.js",
 		"dev": "nodemon server.js",
-		"start": "node server.js"
+		"start": "node server.js",
+		"add-admin": "node src/seeders/admin.js"
 	},
 	"author": "Alex Marc-Aurel N'Guessan",
 	"license": "UNLICENSED",
