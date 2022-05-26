@@ -4,15 +4,19 @@
     <form @submit.prevent="updateInfo()">
       <div class="form-group">
         <label for="lastname">Nom :</label>
-        <div>
-          <input id="lastname" v-model="lastname" type="lastname" required />
-        </div>
+        <input id="lastname" v-model="lastname" type="text" required />
       </div>
       <div class="form-group">
         <label for="firstname">Prénoms :</label>
-        <div>
-          <input id="firstname" v-model="firstname" type="firstname" required />
-        </div>
+        <input id="firstname" v-model="firstname" type="text" required />
+      </div>
+      <div v-if="!isAgent && loginMethod === 'email'" class="form-group">
+        <label for="email">Email :</label>
+        <input id="email" v-model="email" type="email" required />
+      </div>
+      <div v-if="!isAgent && loginMethod === 'phone'" class="form-group">
+        <label for="phone">Phone :</label>
+        <input id="phone" v-model="phone" type="tel" required />
       </div>
       <div class="form-group">
         <label for="collect">Collectivité :</label>
@@ -22,7 +26,12 @@
           </option>
         </select>
       </div>
+
       <button type="submit">Modifier</button>
+
+      <nuxt-link v-if="loginMethod === 'email'" to="/reinitialiser-mdp">
+        Cliquez ici pour modifier mot de passe
+      </nuxt-link>
     </form>
   </section>
 </template>
@@ -46,6 +55,9 @@ export default {
       collectId,
       lastname,
       firstname,
+      email: user.email,
+      phone: user.phone,
+      isAgent: user.isAgent,
       loginMethod,
       token: store.getters.token,
     };
@@ -64,7 +76,13 @@ export default {
       const headers = { Authorization: `Bearer ${this.token}` };
       const response = await this.$axios.$post(
         "/me/update",
-        { firstname: this.firstname, lastname: this.lastname, collectId: this.collectId },
+        {
+          firstname: this.firstname,
+          lastname: this.lastname,
+          collectId: this.collectId,
+          email: this.email,
+          phone: this.phone,
+        },
         { headers }
       );
 
@@ -130,5 +148,11 @@ select {
 .form-group {
   margin-bottom: 2rem;
   width: 100%;
+}
+
+a {
+  display: block;
+  font-weight: bold;
+  margin: 1rem 0;
 }
 </style>
