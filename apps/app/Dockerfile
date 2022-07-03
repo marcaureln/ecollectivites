@@ -4,6 +4,7 @@ WORKDIR /app
 COPY package*.json ./
 RUN npm set progress=false && npm ci
 COPY . .
+ENV API_BASE_URL=https://ecollectivites-api.marcaureln.com
 RUN npm run generate
 
 # Serve
