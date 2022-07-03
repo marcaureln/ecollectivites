@@ -84,10 +84,6 @@ export default {
     keepOnHove: true,
   },
 
-  publicRuntimeConfig: {
-    cdnUrl: process.env.CDN_BASE_URL || "/",
-  },
-
   router: {
     middleware: ["auth"],
   },
