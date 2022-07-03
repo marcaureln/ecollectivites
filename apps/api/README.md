@@ -33,13 +33,22 @@ Before diving into the app you should get a Twilio account. The application use 
 2. Create a `.env` file in project root and copy `example.env` content into it.
 3. Update your `.env` file with your Twilio credentials and your Postgres database URL
 4. Open terminal in project root and run
-``` bash
+
+```bash
 docker-compose up -d # -d to run in detached mode
 ```
+
 5. The application should be listening on [http://localhost:3000](http://localhost:3000)
 6. Before use, add initial data to the app with the following command:
-``` bash
+
+```bash
 docker-compose run app npm run seed
+```
+
+7. (Optional) Add an admin. Before connect to the docker container and enter the following command :
+
+```bash
+npm run add-admin --firstname=Alex --lastname=NGuessan --email=alex@e.co --collectid=7
 ```
 
 ### Option 2: Using Node
@@ -55,16 +64,20 @@ docker-compose run app npm run seed
 2. Create a `.env` file in project root and copy `example.env` content into it.
 3. Update your `.env` file with your Twilio credentials and your Postgres database URL
 4. **Optional**: Add the following line to your `.env` to disable Prisma telemetry
+
 ```
 ENV CHECKPOINT_DISABLE=1
 ```
+
 1. Open terminal in project root and run
-``` bash
+
+```bash
 npm install # Install node packages in package.json
 npx prisma generate # Generate Prisma Client
 npm run seed # Add initial data to the database
 npm run dev # Run the app with nodemon
 ```
+
 5. The application should be listening on [http://localhost:3000](http://localhost:3000)
 6. Before use, add initial data to the app with the following command:
 
