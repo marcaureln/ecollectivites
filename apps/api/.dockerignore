@@ -1,7 +1,8 @@
 node_modules/
-public/uploads/
+uploads/
 .git/
 .gitignore
 Procfile
 Dockerfile
 docker-compose.*
+.env

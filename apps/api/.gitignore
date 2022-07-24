@@ -118,9 +118,4 @@ dist
 .pnp.*
 
 # File upload
-public/uploads/
-
-# Docker
-# .dockerignore
-# Dockerfile
-# docker-compose.yaml
+uploads/
