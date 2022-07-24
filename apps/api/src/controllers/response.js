@@ -15,7 +15,14 @@ exports.makeResponse = async function (req, res, next) {
       throw new AppError(400, 'Missing required fields');
     }
 
-    const resAttachments = req.files.reduce((list, file) => (list += `${file.location};`), '');
+    let resAttachments;
+
+    if (process.env.DO_SPACES_ENDPOINT) {
+      resAttachments = req.files.reduce((list, file) => (list += `${file.location};`), '');
+    } else {
+      resAttachments = req.files.reduce((list, file) => (list += `${process.env.UPLOADS_BASE_URL}/${file.filename};`), '');
+    }
+
     const request = await prisma.request.findUnique({ where: { reqId } });
 
     if (!request) {
