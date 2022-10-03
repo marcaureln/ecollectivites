@@ -1,5 +1,7 @@
 # ecollectivites
 
+[![DigitalOcean Referral Badge](https://web-platforms.sfo2.digitaloceanspaces.com/WWW/Badge%203.svg)](https://www.digitalocean.com/?refcode=758f392749a4&utm_campaign=Referral_Invite&utm_medium=Referral_Program&utm_source=badge)
+
 ## Build Setup
 
 ```bash
