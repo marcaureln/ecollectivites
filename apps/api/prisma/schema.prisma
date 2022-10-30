@@ -1,0 +1,86 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model Collectivite {
+  collectId       Int              @id @default(autoincrement())
+  collectName     String           @db.VarChar(80)
+  collectType     CollectiviteType @relation(fields: [collectTypeId], references: [collectTypeId])
+  collectTypeId   Int
+  collectUsers    User[]
+  collectRequests Request[]
+}
+
+model CollectiviteType {
+  collectTypeId    Int            @id @default(autoincrement())
+  collectTypeLabel String         @db.VarChar(20)
+  collectivites    Collectivite[]
+}
+
+model Request {
+  reqId          String        @id @default(uuid())
+  reqContent     String
+  reqAttachments String?
+  reqCreatedAt   DateTime      @default(now())
+  reqUpdatedAt   DateTime      @updatedAt
+  reqClosedAt    DateTime?
+  reqStatus      RequestStatus @relation(fields: [reqStatusId], references: [reqStatusId])
+  reqStatusId    Int
+  reqType        RequestType   @relation(fields: [reqTypeId], references: [reqTypeId])
+  reqTypeId      Int
+  collect        Collectivite  @relation(fields: [collectId], references: [collectId])
+  collectId      Int
+  user           User          @relation(fields: [userId], references: [userId])
+  userId         String
+  responses      Response[]
+}
+
+model RequestStatus {
+  reqStatusId    Int       @id @default(autoincrement())
+  reqStatusLabel String    @db.VarChar(10)
+  requests       Request[]
+}
+
+model RequestType {
+  reqTypeId    Int       @id @default(autoincrement())
+  reqTypeLabel String    @db.VarChar(20)
+  requests     Request[]
+}
+
+model Response {
+  resId          String   @id @default(uuid())
+  resSendDate    DateTime @default(now())
+  resContent     String
+  resAttachments String?
+  userId         String
+  reqId          String
+  user           User     @relation(fields: [userId], references: [userId])
+  request        Request  @relation(fields: [reqId], references: [reqId])
+}
+
+model User {
+  userId        String       @id @default(uuid())
+  firstname     String       @db.VarChar(80)
+  lastname      String       @db.VarChar(30)
+  role          Role         @default(USER)
+  phone         String?      @unique @db.VarChar(10)
+  email         String?      @unique @db.VarChar(80)
+  password      String?      @db.VarChar(80)
+  passMaxAge    Int          @default(0) //The number of days after the user password must be changed.
+  passChangedAt DateTime?
+  collect       Collectivite @relation(fields: [collectId], references: [collectId])
+  collectId     Int
+  requests      Request[]
+  responses     Response[]
+}
+
+enum Role {
+  USER
+  AGENT
+  ADMIN
+}

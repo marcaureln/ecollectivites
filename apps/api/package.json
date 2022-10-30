@@ -1,0 +1,36 @@
+{
+	"name": "ecollectivites-api",
+	"version": "1.0.0",
+	"description": "",
+	"main": "server.js",
+	"scripts": {
+		"seed": "npx prisma migrate reset --force && node src/seeders/seeder.js",
+		"dev": "nodemon server.js",
+		"start": "node server.js",
+		"add-admin": "node src/seeders/admin.js"
+	},
+	"author": "Alex Marc-Aurel N'Guessan",
+	"license": "UNLICENSED",
+	"dependencies": {
+		"@prisma/client": "^3.10.0",
+		"accesscontrol": "^2.2.1",
+		"aws-sdk": "^2.1130.0",
+		"bcrypt": "^5.0.1",
+		"cors": "^2.8.5",
+		"dotenv": "^8.2.0",
+		"express": "^4.17.1",
+		"jsonwebtoken": "^8.5.1",
+		"multer": "^1.4.3",
+		"multer-s3": "^2.10.0",
+		"twilio": "^3.69.0",
+		"uuid": "^8.3.2"
+	},
+	"devDependencies": {
+		"nodemon": "^2.0.15",
+		"prisma": "^3.10.0"
+	},
+	"prettier": {
+		"printWidth": 120,
+		"singleQuote": true
+	}
+}
