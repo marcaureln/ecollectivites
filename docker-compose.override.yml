@@ -2,13 +2,11 @@ version: '3.9'
 
 services:
   app:
-    image: node:16-alpine
-    command: sh -c "yarn install && yarn dev"
-    working_dir: /app
-    volumes:
-      - ./apps/app:/app
+    command: yarn dev
     ports:
       - 3000:3000
+    volumes:
+      - ./apps/app:/app
     depends_on:
       - api
 
