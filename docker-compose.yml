@@ -1,0 +1,25 @@
+version: '3.9'
+
+services:
+  app:
+    build: ./apps/app
+    container_name: ecollectivites-app
+    expose:
+      - 3000
+    env_file:
+      - ./apps/app/.env
+    depends_on:
+      - api
+
+  api:
+    build: ./apps/api
+    container_name: ecollectivites-api
+    expose:
+      - 8000
+    volumes:
+      - uploads:/app/uploads
+    env_file:
+      - ./apps/api/.env
+
+volumes:
+  uploads:

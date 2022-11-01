@@ -1,0 +1,39 @@
+version: '3.9'
+
+services:
+  app:
+    image: node:16-alpine
+    command: sh -c "yarn install && yarn dev"
+    working_dir: /app
+    volumes:
+      - ./apps/app:/app
+    ports:
+      - 3000:3000
+    depends_on:
+      - api
+
+  api:
+    command: yarn dev
+    ports:
+      - 8000:8000
+    volumes:
+      - ./apps/api/src:/app/src
+    environment:
+      - DATABASE_URL=postgresql://postgres:admin@postgres:5432/ecollectivites?schema=public
+    depends_on:
+      - postgres
+
+  postgres:
+    image: postgres:alpine
+    container_name: ecollectivites-db
+    ports:
+      - 5432:5432
+    environment:
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=admin
+      - POSTGRES_DB=ecollectivites
+    volumes:
+      - pg-data:/var/lib/postgresql/data
+
+volumes:
+  pg-data:

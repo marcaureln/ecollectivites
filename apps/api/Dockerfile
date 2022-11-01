@@ -1,10 +1,10 @@
-FROM node:current-alpine
+FROM node:16-alpine
 
 WORKDIR /app
 
-COPY package.json .
+COPY package*.json ./
 
-RUN npm set progress=false && npm install
+RUN yarn install
 
 COPY . .
 
@@ -15,6 +15,6 @@ ENV CHECKPOINT_DISABLE=1
 
 RUN npx prisma generate
 
-EXPOSE 3000
+EXPOSE 8000
 
-CMD [ "npm", "start" ]
+CMD [ "yarn", "start" ]
