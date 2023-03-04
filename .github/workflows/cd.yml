@@ -22,6 +22,8 @@ jobs:
 
       - name: Generate
         run: yarn build
+        env:
+          API_BASE_URL: https://ecollectivites-api.marcaureln.com
 
       - name: Deploy
         uses: peaceiris/actions-gh-pages@v3
