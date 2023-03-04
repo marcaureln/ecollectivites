@@ -21,7 +21,7 @@ jobs:
         run: yarn install
 
       - name: Generate
-        run: yarn build
+        run: yarn generate
         env:
           API_BASE_URL: https://ecollectivites-api.marcaureln.com
 

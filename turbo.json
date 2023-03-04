@@ -5,7 +5,14 @@
       "dependsOn": ["^build"],
       "outputs": [".nuxt/**"]
     },
+    "generate": {
+      "dependsOn": ["^build"],
+      "outputs": [".nuxt/**"]
+    },
     "lint": {
+      "outputs": []
+    },
+    "format": {
       "outputs": []
     },
     "dev": {

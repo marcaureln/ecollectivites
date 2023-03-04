@@ -4,7 +4,7 @@
   "private": true,
   "scripts": {
     "dev": "nuxt",
-    "build": "nuxt generate",
+    "generate": "nuxt generate",
     "start": "nuxt start",
     "lint": "eslint .",
     "format": "prettier --ignore-path .gitignore --write ."
