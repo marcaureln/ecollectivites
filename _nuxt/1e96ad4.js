@@ -1,0 +1,1 @@
+(window.webpackJsonp=window.webpackJsonp||[]).push([[16],{448:function(n,e,t){"use strict";t.r(e);var r={middleware:function(n){(0,n.redirect)("/dashboard/admin/ajouter-agent")}},d=t(8),component=Object(d.a)(r,(function(){return(0,this._self._c)("div")}),[],!1,null,null,null);e.default=component.exports}}]);
