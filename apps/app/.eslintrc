@@ -10,5 +10,6 @@
     "space-before-function-paren": 0,
     "vue/attribute-hyphenation": 0,
     "vue/singleline-html-element-content-newline": 0
-  }
+  },
+  "ignorePatterns": ["node_modules", "dist", ".nuxt"]
 }

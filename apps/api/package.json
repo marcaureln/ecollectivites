@@ -1,13 +1,15 @@
 {
-  "name": "ecollectivites-api",
+  "name": "api",
   "version": "1.0.0",
   "description": "",
   "main": "server.js",
   "scripts": {
-    "seed": "npx prisma migrate reset --force && node src/seeders/seeder.js",
+    "migrate": "npx prisma migrate deploy",
+    "migrate:dev": "npx prisma migrate dev",
+    "seed": "node prisma/seed.js",
     "dev": "nodemon server.js",
     "start": "node server.js",
-    "add-admin": "node src/seeders/admin.js"
+    "format": "prettier --ignore-path .gitignore --write ."
   },
   "author": "Alex Marc-Aurel N'Guessan",
   "license": "UNLICENSED",

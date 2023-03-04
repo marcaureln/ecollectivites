@@ -1,13 +1,13 @@
 {
-  "name": "ecollectivites-app",
+  "name": "app",
   "version": "1.0.0",
   "private": true,
   "scripts": {
     "dev": "nuxt",
-    "build": "nuxt build",
+    "build": "nuxt generate",
     "start": "nuxt start",
-    "generate": "nuxt generate",
-    "lint": "eslint ."
+    "lint": "eslint .",
+    "format": "prettier --ignore-path .gitignore --write ."
   },
   "dependencies": {
     "@nuxtjs/axios": "^5.13.6",
